@@ -30,6 +30,7 @@
     "drizzle-orm": "^0.40.0",
     "fabric": "5.3.0-browser",
     "hono": "^4.7.2",
+    "jsdom": "^26.0.0",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.477.0",
     "material-colors": "^1.2.6",

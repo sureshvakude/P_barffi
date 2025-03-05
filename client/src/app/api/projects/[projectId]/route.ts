@@ -3,9 +3,10 @@ import { db } from "@/db/db";
 import { eq } from "drizzle-orm"; // Import the correct equality operator
 import { projects } from "@/db/schema"; // Ensure schema is imported correctly
 
-export async function GET(req: Request, { params }: { params: { projectId: string } }) {
+export async function GET(req: Request, context: { params: { projectId: string } }) {
   try {
-    const projectId = Number(params.projectId);
+    const { params } = context;
+    const projectId = Number(await params.projectId);
     if (isNaN(projectId)) {
       return NextResponse.json({ error: "Invalid project ID" }, { status: 400 });
     }

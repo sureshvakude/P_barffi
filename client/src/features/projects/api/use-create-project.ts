@@ -1,19 +1,32 @@
 import { useMutation } from "@tanstack/react-query";
 
 const createProject = async () => {
-  const response = await fetch("/api/projects/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include", // Ensures authentication session is included
-  });
+  try {
+    const response = await fetch("/api/projects/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        name: "Untitled project",
+        json: "",
+        width: 900,
+        height: 1200,
+      }),
+    });
 
-  if (!response.ok) {
-    throw new Error("Failed to create project");
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to create project");
+    }
+
+    console.log("Project created successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Error creating project:", error);
+    throw error;
   }
-
-  return response.json();
 };
 
 export const useCreateProject = () => {

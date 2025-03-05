@@ -6,16 +6,12 @@ import { useGetProject } from "@/features/projects/api/use-get-project";
 
 import { Editor } from "@/features/editor/components/editor";
 import { Button } from "@/components/ui/button";
+import { useParams } from "next/navigation";
 
-interface EditorProjectIdPageProps {
-  params: {
-    projectId: string;
-  };
-}
-
-const EditorProjectIdPage = ({ params }: EditorProjectIdPageProps) => {
-  const { data, isLoading, isError } = useGetProject(params.projectId);
-
+const EditorProjectIdPage = () => {
+  const params = useParams();
+  const projectId = params.projectId as string;
+  const { data, isLoading, isError } = useGetProject(projectId);
   if (isLoading || !data) {
     return (
       <div className="h-full flex flex-col items-center justify-center">

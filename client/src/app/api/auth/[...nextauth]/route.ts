@@ -1,9 +1,12 @@
-import NextAuth, { SessionStrategy } from "next-auth";
+import NextAuth, { NextAuthOptions, SessionStrategy } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { db } from "@/db/db";
+import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
+import { db } from "@/db/db";
+import { schema } from "@/db/schema";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -16,7 +19,6 @@ export const authOptions = {
           throw new Error("Email and password are required");
         }
 
-        // Find user by email
         const user = await db.query.users.findFirst({
           where: (users, { eq }) => eq(users.email, credentials.email),
         });
@@ -25,7 +27,6 @@ export const authOptions = {
           throw new Error("No user found with this email");
         }
 
-        // Check password
         const passwordMatch = await bcrypt.compare(credentials.password, user.password);
         if (!passwordMatch) {
           throw new Error("Incorrect password");
@@ -35,32 +36,71 @@ export const authOptions = {
           id: user.id.toString(),
           name: user.name,
           email: user.email,
-          image: user.img,
-          userType: user.userType, // Include userType
+          image: user.img ?? undefined,
+          userType: user.userType,
         };
       },
     }),
+
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
   ],
+
   callbacks: {
-    async session({ session, token }: { session: any; token: any }) {
-      if (session.user) {
-        session.user.id = token.id;
-        session.user.userType = token.userType; // Include userType in session
-      }
-      return session;
-    },
-    async jwt({ token, user }: { token: any; user?: any }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        token.id = user.id;
-        token.userType = user.userType;
+        let dbUser = await db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.email, user.email),
+        });
+
+        if (!dbUser && account) {
+          // Insert user into the database
+          await db.insert(schema.users).values({
+            name: user.name,
+            email: user.email,
+            password: "", // OAuth users don't have passwords
+            userType: "user", // Default userType
+          });
+
+          // Fetch the newly inserted user
+          dbUser = await db.query.users.findFirst({
+            where: (users, { eq }) => eq(users.email, user.email),
+          });
+        }
+
+        if (dbUser) {
+          token.id = dbUser.id.toString();
+          token.name = dbUser.name;
+          token.email = dbUser.email;
+          token.userType = dbUser.userType;
+        }
       }
       return token;
     },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.userType = token.userType as string;
+      }
+      return session;
+    },
   },
+
   session: {
     strategy: "jwt" as SessionStrategy,
   },
-  secret: process.env.NEXTAUTH_SECRET, // Make sure this is in your .env
+
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

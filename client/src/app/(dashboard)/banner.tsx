@@ -12,7 +12,8 @@ export const Banner = () => {
   const onClick = () => {
     mutate(undefined, {
       onSuccess: (data) => {
-        router.push(`/editor/${data.id}`); // Navigate to the new project editor
+        const id = data.projectId[0].id;
+        router.push(`/editor/${id}`);
       },
       onError: (error) => {
         console.error("Failed to create project:", error);

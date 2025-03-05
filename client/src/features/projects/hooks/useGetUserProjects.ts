@@ -17,9 +17,10 @@ const fetchUserProjects = async () => {
 };
 
 // Hook to fetch projects for the current user
-export const useUserProjects = () => {
+export const useUserProjects = ({ enabled }: { enabled: boolean }) => {
     return useQuery({
-        queryKey: ["userProjects"],
-        queryFn: fetchUserProjects,
+      queryKey: ["userProjects"],
+      queryFn: fetchUserProjects,
+      enabled, // ✅ This prevents fetching when the user is not logged in
     });
 };

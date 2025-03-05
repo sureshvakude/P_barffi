@@ -32,7 +32,9 @@ import { useSession } from "next-auth/react";
 export const ProjectsSection = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const { data: projects, isLoading, isError } = useUserProjects();
+  
+  // ✅ Always call the hook, but only enable fetching when user is logged in
+  const { data: projects, isLoading, isError } = useUserProjects({ enabled: !!session });
 
   if (!session) {
     return (
@@ -47,7 +49,6 @@ export const ProjectsSection = () => {
       </div>
     );
   }
-
 
   if (isLoading) {
     return (
