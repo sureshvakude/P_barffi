@@ -31,7 +31,7 @@ export const Banner = () => {
         //   disabled={mutation.isPending}
           onClick={onClick}
           variant="secondary"
-          className="w-[160px]"
+          className="w-[160px] cursor-pointer"
         >
           Start creating
           {loading ? (
