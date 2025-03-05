@@ -2,17 +2,22 @@
 
 import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2, Sparkles } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useCreateProject } from "@/features/projects/api/use-create-project";
 
 export const Banner = () => {
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { mutate, isPending } = useCreateProject();
 
   const onClick = () => {
-    setLoading(true);
-    // api for create project and store and open the project
+    mutate(undefined, {
+      onSuccess: (data) => {
+        router.push(`/editor/${data.id}`); // Navigate to the new project editor
+      },
+      onError: (error) => {
+        console.error("Failed to create project:", error);
+      },
+    });
   };
 
   return (
@@ -28,13 +33,13 @@ export const Banner = () => {
           Turn inspiration into design in no time. Simply upload an image and let AI do the rest.
         </p>
         <Button
-        //   disabled={mutation.isPending}
+          disabled={isPending}
           onClick={onClick}
           variant="secondary"
           className="w-[160px] cursor-pointer"
         >
           Start creating
-          {loading ? (
+          {isPending ? (
             <Loader2 className="size-4 ml-2 animate-spin" />
           ) : (
             <ArrowRight className="size-4 ml-2" />

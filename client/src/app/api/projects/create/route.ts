@@ -7,13 +7,15 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    let userId: number = 0; // Default to 0 for guests
+    let userType = "guest"; // Default type for guests
 
-    const userId = Number(session.user.id);
-    if (isNaN(userId)) {
-      return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
+    if (session && session.user) {
+      userId = Number(session.user.id);
+      if (isNaN(userId)) {
+        return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
+      }
+      userType = session.user.userType || "user";
     }
 
     const body = await req.json();

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Loader, TriangleAlert } from "lucide-react";
 import { TemplateCard } from "./template-card";
-import { useAdminProjects } from "@/features/projects/hooks/fetchProjects";
+import { useAdminProjects } from "@/features/projects/hooks/useGetAdminProjects";
 
 export const TemplatesSection = () => {
     const router = useRouter();

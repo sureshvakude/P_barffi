@@ -12,7 +12,7 @@ import {
   Search,
   Trash
 } from "lucide-react";
-import { useUserProjects } from "@/features/projects/hooks/useUserProjects";
+import { useUserProjects } from "@/features/projects/hooks/useGetUserProjects";
 
 import {
   DropdownMenuContent,
