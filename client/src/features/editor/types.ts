@@ -107,7 +107,8 @@ export type ActiveTool =
   | "settings"
   | "ai"
   | "remove-bg"
-  | "templates";
+  | "templates"
+  | "frames";
 
 export const FILL_COLOR = "rgba(0,0,0,1)";
 export const STROKE_COLOR = "rgba(0,0,0,1)";
@@ -250,6 +251,7 @@ export interface Editor {
   changeStrokeColor: (value: string) => void;
   changeStrokeDashArray: (value: number[]) => void;
   addCircle: () => void;
+  addCircleFrame: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
   addTriangle: () => void;

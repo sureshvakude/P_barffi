@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutTemplate,ImageIcon,Pencil,Settings,Shapes,Sparkles,Type,} from "lucide-react";
+import { LayoutTemplate,ImageIcon,Pencil,Settings,Shapes,Sparkles,Type, Frame} from "lucide-react";
 import { ActiveTool } from "@/features/editor/types";
 import { SidebarItem } from "@/features/editor/components/sidebar-item";
 
@@ -21,6 +21,12 @@ export const Sidebar = ({
           label="Design"
           isActive={activeTool === "templates"}
           onClick={() => onChangeActiveTool("templates")}
+        />
+        <SidebarItem
+          icon={Frame}
+          label="Frames"
+          isActive={activeTool === "frames"}
+          onClick={() => onChangeActiveTool("frames")}
         />
         <SidebarItem
           icon={ImageIcon}

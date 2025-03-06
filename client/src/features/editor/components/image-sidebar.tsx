@@ -1,16 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AlertTriangle, Loader, Upload } from "lucide-react";
+import { AlertTriangle, Loader, Upload, Trash2 } from "lucide-react";
 
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
-
-// import { useGetImages } from "@/features/images/api/use-get-images";
-
 import { cn } from "@/lib/utils";
-// import { UploadButton } from "@/lib/uploadthing";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState, useEffect } from "react";
 
 interface ImageSidebarProps {
   editor: Editor | undefined;
@@ -19,7 +16,36 @@ interface ImageSidebarProps {
 }
 
 export const ImageSidebar = ({ editor, activeTool, onChangeActiveTool }: ImageSidebarProps) => {
-//   const { data, isLoading, isError } = useGetImages();
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const storedImages = JSON.parse(sessionStorage.getItem("uploadedImages") || "[]");
+    setImages(storedImages);
+  }, []);
+
+  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size exceeds 5MB limit.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newImage = reader.result as string;
+        const updatedImages = [...images, newImage];
+        setImages(updatedImages);
+        sessionStorage.setItem("uploadedImages", JSON.stringify(updatedImages));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDelete = (index: number) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    setImages(updatedImages);
+    sessionStorage.setItem("uploadedImages", JSON.stringify(updatedImages));
+  };
 
   const onClose = () => {
     onChangeActiveTool("select");
@@ -34,58 +60,31 @@ export const ImageSidebar = ({ editor, activeTool, onChangeActiveTool }: ImageSi
     >
       <ToolSidebarHeader title="Images" description="Add images to your canvas" />
       <div className="p-4 border-b">
-        {/* <UploadButton
-          appearance={{
-            button: "w-full text-sm font-medium",
-            allowedContent: "hidden",
-          }}
-          content={{
-            button: "Upload Image",
-          }}
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            editor?.addImage(res[0].url);
-          }}
-        /> */}
+        <label className="w-full flex items-center gap-2 text-sm font-medium cursor-pointer">
+          <Upload className="size-4" />
+          Upload Image
+          <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
+        </label>
       </div>
-      {/* {isLoading && (
-        <div className="flex items-center justify-center flex-1">
-          <Loader className="size-4 text-muted-foreground animate-spin" />
-        </div>
-      )}
-      {isError && (
-        <div className="flex flex-col gap-y-4 items-center justify-center flex-1">
-          <AlertTriangle className="size-4 text-muted-foreground" />
-          <p className="text-muted-foreground text-xs">Failed to fetch images</p>
-        </div>
-      )} */}
       <ScrollArea className="flex-1 overflow-auto">
         <div className="p-4">
           <div className="grid grid-cols-2 gap-4">
-            {/* {data &&
-              data.map((image) => {
-                return (
-                  <button
-                    onClick={() => editor?.addImage(image.urls.regular)}
-                    key={image.id}
-                    className="relative w-full h-[100px] group hover:opacity-75 transition bg-muted rounded-sm overflow-hidden border"
-                  >
-                    <img
-                      src={image?.urls?.small || image?.urls?.thumb}
-                      alt={image.alt_description || "Image"}
-                      className="object-cover"
-                      loading="lazy"
-                    />
-                    <Link
-                      target="_blank"
-                      href={image.links.html}
-                      className="opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full text-[10px] truncate text-white hover:underline p-1 bg-black/50 text-left"
-                    >
-                      {image.user.name}
-                    </Link>
-                  </button>
-                );
-              })} */}
+            {images.map((image, index) => (
+              <div key={index} className="relative group">
+                <button
+                  onClick={() => editor?.addImage(image)}
+                  className="relative w-full h-[100px] group hover:opacity-75 transition bg-muted rounded-sm overflow-hidden border"
+                >
+                  <img src={image} alt="Uploaded" className="object-cover w-full h-full" />
+                </button>
+                <button
+                  onClick={() => handleDelete(index)}
+                  className="absolute top-1 right-1 p-1 bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </ScrollArea>

@@ -47,8 +47,8 @@ export const TemplatesSection = () => {
                         <TemplateCard
                             key={template.id}
                             title={template.name}
-                            imageSrc={template.thumbnailUrl || ""}
-                            onClick={() => router.push(`/projects/${template.id}`)}
+                            imageSrc={template.thumbnail || ""}
+                            onClick={() => router.push(`/editor/${template.id}`)}
                             description={`${template.width} x ${template.height} px`}
                             width={template.width}
                             height={template.height}

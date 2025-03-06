@@ -38,7 +38,7 @@ export const TemplateCard = ({
       className="relative rounded-xl h-full w-full overflow-hidden border">
         <Image
           fill
-          src={imageSrc}
+          src={imageSrc || "/uploads/placeholder.jpg"}
           alt={title}
           className=" object-cover transition transform group-hover:scale-105"
         />
