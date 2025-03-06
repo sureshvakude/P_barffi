@@ -5,7 +5,7 @@ export type UpdateProjectRequest = {
   width?: number;
   height?: number;
   thumbnail?: string;
-  json?: any; // Adjust based on actual data structure
+  json?: any;
   isPro?: boolean;
   prize?: number;
   isTemplate?: boolean;
@@ -37,7 +37,7 @@ const updateProject = async ({
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include",
+    credentials: "include", // ✅ Keep if using authentication
     body: JSON.stringify(data),
   });
 
@@ -50,6 +50,10 @@ const updateProject = async ({
 
 export const useUpdateProject = (projectId: string) => {
   return useMutation({
+    mutationKey: ["project", { id: projectId }], // ✅ Added for tracking status
     mutationFn: (data: UpdateProjectRequest) => updateProject({ projectId, data }),
+    onError: (error) => {
+      console.error("Failed to update project:", error);
+    },
   });
 };

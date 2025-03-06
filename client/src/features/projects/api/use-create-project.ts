@@ -20,8 +20,6 @@ const createProject = async () => {
     if (!response.ok) {
       throw new Error(data.message || "Failed to create project");
     }
-
-    console.log("Project created successfully:", data);
     return data;
   } catch (error) {
     console.error("Error creating project:", error);

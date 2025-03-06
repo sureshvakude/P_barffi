@@ -59,7 +59,7 @@ export const ImageSidebar = ({ editor, activeTool, onChangeActiveTool }: ImageSi
           <p className="text-muted-foreground text-xs">Failed to fetch images</p>
         </div>
       )} */}
-      <ScrollArea>
+      <ScrollArea className="flex-1 overflow-auto">
         <div className="p-4">
           <div className="grid grid-cols-2 gap-4">
             {/* {data &&

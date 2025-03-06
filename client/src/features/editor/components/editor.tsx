@@ -37,7 +37,6 @@ interface EditorProps {
 export const Editor = ({ initialData }: EditorProps) => {
     const { mutate } = useUpdateProject(initialData.id);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSave = useCallback(
         debounce(
             (values: {
@@ -47,7 +46,7 @@ export const Editor = ({ initialData }: EditorProps) => {
             }) => {
                 mutate(values);
             },
-            500
+            1000
         ), [mutate]);
 
     const [activeTool, setActiveTool] = useState<ActiveTool>("select");

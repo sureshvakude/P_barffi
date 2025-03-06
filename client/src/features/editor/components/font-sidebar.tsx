@@ -38,7 +38,7 @@ import {
           title="Font"
           description="Change the text font"
         />
-        <ScrollArea>
+        <ScrollArea className="flex-1 overflow-auto">
           <div className="p-4 space-y-1 border-b">
             {fonts.map((font) => (
               <Button

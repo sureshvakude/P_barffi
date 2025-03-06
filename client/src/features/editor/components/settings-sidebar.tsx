@@ -74,7 +74,7 @@ export const SettingsSidebar = ({
         title="Settings"
         description="Change the look of your workspace"
       />
-      <ScrollArea>
+      <ScrollArea className="flex-1 overflow-auto">
         <form className="space-y-4 p-4" onSubmit={onSubmit}>
           <div className="space-y-2">
             <Label>

@@ -21,10 +21,6 @@ const signUpUser = async (userData: { name: string; email: string; password: str
 export const useSignUp = () => {
     return useMutation({
         mutationFn: signUpUser,
-        onSuccess: (data) => {
-            console.log("User signed up successfully:", data);
-            // Redirect or automatically log in the user if needed
-        },
         onError: (error) => {
             console.error("Signup error:", error);
         },

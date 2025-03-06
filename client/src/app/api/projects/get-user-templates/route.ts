@@ -11,14 +11,14 @@ export async function GET(req: Request) {
     }
 
     const userId = Number(session.user.id); // Convert user ID to a number
-
+    
     if (isNaN(userId)) {
       return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
 
     const userTemplates = await db.query.projects.findMany({
       where: (project, { and, eq }) =>
-        and(eq(project.userId, userId), eq(project.isTemplate, true)),
+        and(eq(project.userId, userId), eq(project.isTemplate, false)),
     });
 
     return NextResponse.json(userTemplates, { status: 200 });

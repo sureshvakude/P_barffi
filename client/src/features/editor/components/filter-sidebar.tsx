@@ -36,7 +36,7 @@ import {
           title="Filters"
           description="Apply a filter to selected image"
         />
-        <ScrollArea>
+        <ScrollArea className="flex-1 overflow-auto">
           <div className="p-4 space-y-1 border-b">
             {filters.map((filter) => (
               <Button

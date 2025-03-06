@@ -36,7 +36,7 @@ export const ShapeSidebar = ({
         title="Shapes"
         description="Add shapes to your canvas"
       />
-      <ScrollArea>
+      <ScrollArea className="flex-1 overflow-auto">
         <div className="grid grid-cols-3 gap-4 p-4">
           <ShapeTool
             onClick={() => editor?.addCircle()}

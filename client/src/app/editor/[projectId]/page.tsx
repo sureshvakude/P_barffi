@@ -6,12 +6,19 @@ import { useGetProject } from "@/features/projects/api/use-get-project";
 
 import { Editor } from "@/features/editor/components/editor";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
+import React from "react";
 
-const EditorProjectIdPage = () => {
-  const params = useParams();
-  const projectId = params.projectId as string;
-  const { data, isLoading, isError } = useGetProject(projectId);
+const EditorProjectIdPage = ({ params }: { params: Promise<{ projectId: string }> }) => {
+  // ✅ Use state to store projectId
+  const [projectId, setProjectId] = React.useState<string | null>(null);
+
+  // ✅ Unwrap params using useEffect
+  React.useEffect(() => {
+    params.then(({ projectId }) => setProjectId(projectId)).catch(console.error);
+  }, [params]);
+
+  // ✅ Ensure projectId is available before fetching data
+  const { data, isLoading, isError } = useGetProject(projectId ?? "");
   if (isLoading || !data) {
     return (
       <div className="h-full flex flex-col items-center justify-center">
@@ -24,9 +31,7 @@ const EditorProjectIdPage = () => {
     return (
       <div className="h-full flex flex-col gap-y-5 items-center justify-center">
         <TriangleAlert className="size-6 text-muted-foreground" />
-        <p className="text-muted-foreground text-sm">
-          Failed to fetch project
-        </p>
+        <p className="text-muted-foreground text-sm">Failed to fetch project</p>
         <Button asChild variant="secondary">
           <Link href="/">Back to Home</Link>
         </Button>

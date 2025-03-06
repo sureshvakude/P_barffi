@@ -38,7 +38,7 @@ export const StrokeColorSidebar = ({
         title="Stroke color"
         description="Add stroke color to your element"
       />
-      <ScrollArea>
+      <ScrollArea className="flex-1 overflow-auto">
         <div className="p-4 space-y-6">
           <ColorPicker
             value={value}

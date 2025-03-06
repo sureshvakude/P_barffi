@@ -3,9 +3,7 @@ import { db, schema } from "@/db/db";
 
 export async function GET() {
   try {
-    const templates = await db.query.projects.findMany({
-      where: (project, { eq }) => eq(project.isTemplate, true),
-    });
+    const templates = await db.query.projects.findMany();
 
     return NextResponse.json(templates, { status: 200 });
   } catch (error) {

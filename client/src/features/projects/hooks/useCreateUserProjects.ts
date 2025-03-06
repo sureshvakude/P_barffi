@@ -24,8 +24,6 @@ export const useCreateProject = () => {
     return useMutation({
         mutationFn: createProject,
         onSuccess: (data) => {
-            console.log("Project created successfully:", data);
-
             // Optimistically update the UI by invalidating the userProjects query
             queryClient.invalidateQueries({ queryKey: ["userProjects"] });
 

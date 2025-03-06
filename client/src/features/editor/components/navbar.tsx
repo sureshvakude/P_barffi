@@ -4,14 +4,7 @@ import { CiFileOn } from "react-icons/ci";
 import { BsCloudCheck, BsCloudSlash } from "react-icons/bs";
 import { useFilePicker } from "use-file-picker";
 import { useMutationState } from "@tanstack/react-query";
-import { 
-  ChevronDown, 
-  Download, 
-  Loader, 
-  MousePointerClick, 
-  Redo2, 
-  Undo2
-} from "lucide-react";
+import { ChevronDown, Download, Loader, MousePointerClick, Redo2, Undo2 } from "lucide-react";
 
 import { UserButton } from "@/features/auth/components/user-button";
 
@@ -22,12 +15,7 @@ import { cn } from "@/lib/utils";
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
   id: string;
@@ -127,7 +115,7 @@ export const Navbar = ({
           </Button>
         </Hint>
         <Separator orientation="vertical" className="mx-2" />
-        {isPending && ( 
+        {isPending && (
           <div className="flex items-center gap-x-2">
             <Loader className="size-4 animate-spin text-muted-foreground" />
             <div className="text-xs text-muted-foreground">
@@ -135,7 +123,7 @@ export const Navbar = ({
             </div>
           </div>
         )}
-        {!isPending && isError && ( 
+        {!isPending && isError && (
           <div className="flex items-center gap-x-2">
             <BsCloudSlash className="size-[20px] text-muted-foreground" />
             <div className="text-xs text-muted-foreground">
@@ -143,7 +131,7 @@ export const Navbar = ({
             </div>
           </div>
         )}
-        {!isPending && !isError && ( 
+        {!isPending && !isError && (
           <div className="flex items-center gap-x-2">
             <BsCloudCheck className="size-[20px] text-muted-foreground" />
             <div className="text-xs text-muted-foreground">

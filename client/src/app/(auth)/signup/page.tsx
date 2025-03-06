@@ -47,7 +47,7 @@ const Page = () => {
           <TriangleAlert className="size-4" />
           <p>Something went wrong</p>
         </div>
-      )} */}
+      )} */} 
       <CardContent className="space-y-5 px-0 pb-0">
         <form onSubmit={onCredentialSignUp} className="space-y-2.5">
           <Input
