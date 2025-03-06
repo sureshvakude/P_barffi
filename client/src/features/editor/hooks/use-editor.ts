@@ -218,6 +218,10 @@ const buildEditor = ({
           image.scaleToHeight(workspace?.height || 0);
 
           addToCanvas(image);
+
+          image.on("moving", function () {
+            checkAndApplyClipping(image, canvas);
+          });
         },
         {
           crossOrigin: "anonymous",
@@ -459,13 +463,19 @@ const buildEditor = ({
     },
     addCircleFrame: () => {
       const clipPath = new fabric.Path("M 250,50 A 200,200 0 1,1 250,450 A 200,200 0 1,1 250,50 Z", {
-        fill: "red",
-        fillRule: "evenodd",
-        selectable: true,
-        evented: true,
+        opacity: 0.2,
+        absolutePositioned: true,
+        originX: "center",
+        originY: "center",
+        name: "clipShape"
       });
 
       addToCanvas(clipPath);
+      // fabric.Image.fromURL('/logo.png', function (img) {
+      //   img.set({ left: 0, top: 0 });
+      //   img.clipPath = clipPath;
+      //   canvas.add(img);
+      // });
     },
     addSoftRectangle: () => {
       const object = new fabric.Rect({
@@ -767,6 +777,8 @@ export const useEditor = ({
       initialCanvas.setWidth(initialContainer.offsetWidth);
       initialCanvas.setHeight(initialContainer.offsetHeight);
 
+      initialCanvas.preserveObjectStacking = true;
+
       initialCanvas.add(initialWorkspace);
       initialCanvas.centerObject(initialWorkspace);
       initialCanvas.clipPath = initialWorkspace;
@@ -788,3 +800,19 @@ export const useEditor = ({
 
   return { init, editor };
 };
+
+const checkAndApplyClipping = (img: any, canvas: any) => {
+  const objects = canvas.getObjects();
+  const shape = objects.find((obj: { name: string; }) => obj.name === "clipShape");
+
+  if (shape) {
+    // Check if image even slightly overlaps with the shape
+    if (img.intersectsWithObject(shape)) {
+      img.clipPath = shape;
+    } else {
+      img.clipPath = null; // Remove clipping if no contact
+    }
+
+    canvas.renderAll();
+  }
+}
