@@ -3,36 +3,18 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
-import {
-  AlertTriangle,
-  CopyIcon,
-  FileIcon,
-  Loader,
-  MoreHorizontal,
-  Search,
-  Trash
-} from "lucide-react";
+import { AlertTriangle, CopyIcon, FileIcon, Loader, MoreHorizontal, Search, Trash } from "lucide-react";
 import { useUserProjects } from "@/features/projects/hooks/useGetUserProjects";
 
-import {
-  DropdownMenuContent,
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableRow,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
+import { DropdownMenuContent, DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
+import { Table, TableRow, TableBody, TableCell, } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 
 export const ProjectsSection = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  
+
   // ✅ Always call the hook, but only enable fetching when user is logged in
   const { data: projects, isLoading, isError } = useUserProjects({ enabled: !!session });
 
@@ -113,9 +95,7 @@ export const ProjectsSection = () => {
                 onClick={() => router.push(`/editor/${project.id}`)}
                 className="hidden md:table-cell cursor-pointer"
               >
-                {formatDistanceToNow(new Date(project.updatedAt), {
-                  addSuffix: true,
-                })}
+                {formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })}
               </TableCell>
               <TableCell className="flex items-center justify-end">
                 <DropdownMenu modal={false}>

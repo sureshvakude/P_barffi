@@ -12,11 +12,11 @@ const font = Space_Grotesk({
 export const Logo = () => {
   return (
     <Link href="/">
-      <div className="flex items-center gap-x-2 hover:opacity-75 transition h-[68px] px-4">
-        <div className="size-8 w-1/3 relative">
+      <div className="flex items-center gap-x-2 hover:opacity-75 transition h-[68px] px-4 md:px-12">
+        <div className="size-8 w-2/5 relative">
           <Image src="/logo.png" alt="The Canvas" fill sizes="10"/>
         </div>
-        <h1 className={cn(font.className, "text-xl font-bold")}>Barffi</h1>
+        {/* <h1 className={cn(font.className, "text-xl font-bold")}>Barffi</h1> */}
       </div>
     </Link>
   );

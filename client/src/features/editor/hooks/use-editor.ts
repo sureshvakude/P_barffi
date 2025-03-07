@@ -471,7 +471,7 @@ const buildEditor = ({
       });
 
       addToCanvas(clipPath);
-      // fabric.Image.fromURL('/logo.png', function (img) {
+      // fabric.Image.fromURL('/image-placeholder.png', function (img) {
       //   img.set({ left: 0, top: 0 });
       //   img.clipPath = clipPath;
       //   canvas.add(img);
@@ -806,13 +806,11 @@ const checkAndApplyClipping = (img: any, canvas: any) => {
   const shape = objects.find((obj: { name: string; }) => obj.name === "clipShape");
 
   if (shape) {
-    // Check if image even slightly overlaps with the shape
     if (img.intersectsWithObject(shape)) {
       img.clipPath = shape;
     } else {
-      img.clipPath = null; // Remove clipping if no contact
+      img.clipPath = null;
     }
-
     canvas.renderAll();
   }
 }
