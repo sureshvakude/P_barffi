@@ -113,7 +113,15 @@ const buildEditor = ({
     const data = JSON.parse(json);
 
     canvas.loadFromJSON(data, () => {
-      autoZoom();
+      // Find the clipPath object and update properties
+      const clipShape = canvas.getObjects().find((obj) => obj.name === "clipShape");
+      if (clipShape) {
+        clipShape.set({
+          absolutePositioned: true
+        });
+      }
+
+      canvas.renderAll();
     });
   };
 
@@ -462,7 +470,7 @@ const buildEditor = ({
       addToCanvas(object);
     },
     addCircleFrame: () => {
-      const clipPath = new fabric.Path("M 250,50 A 200,200 0 1,1 250,450 A 200,200 0 1,1 250,50 Z", {
+      const circleFrame = new fabric.Path("M 250,50 A 200,200 0 1,1 250,450 A 200,200 0 1,1 250,50 Z", {
         opacity: 0.2,
         absolutePositioned: true,
         originX: "center",
@@ -470,12 +478,7 @@ const buildEditor = ({
         name: "clipShape"
       });
 
-      addToCanvas(clipPath);
-      // fabric.Image.fromURL('/logo.png', function (img) {
-      //   img.set({ left: 0, top: 0 });
-      //   img.clipPath = clipPath;
-      //   canvas.add(img);
-      // });
+      addToCanvas(circleFrame);
     },
     addSoftRectangle: () => {
       const object = new fabric.Rect({
@@ -808,6 +811,7 @@ const checkAndApplyClipping = (img: any, canvas: any) => {
   if (shape) {
     // Check if image even slightly overlaps with the shape
     if (img.intersectsWithObject(shape)) {
+      console.log(img);
       img.clipPath = shape;
     } else {
       img.clipPath = null; // Remove clipping if no contact

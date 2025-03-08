@@ -16,7 +16,7 @@ export const Logo = () => {
         <div className="size-8 w-1/3 relative">
           <Image src="/logo.png" alt="The Canvas" fill sizes="10"/>
         </div>
-        <h1 className={cn(font.className, "text-xl font-bold")}>Barffi</h1>
+        {/* <h1 className={cn(font.className, "text-xl font-bold")}>Barffi</h1> */}
       </div>
     </Link>
   );

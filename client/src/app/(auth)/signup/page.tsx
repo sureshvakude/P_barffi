@@ -5,53 +5,74 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Loader2, TriangleAlert } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
 
-const Page = () => {
+const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [loadingGithub, setLoadingGithub] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onProviderSignUp = (provider: "github" | "google") => {
+  const onProviderSignUp = async (provider: "github" | "google") => {
     setLoading(true);
     setLoadingGithub(provider === "github");
     setLoadingGoogle(provider === "google");
 
-    signIn(provider, { callbackUrl: "/" });
+    await signIn(provider, { callbackUrl: "/" });
   };
 
-  const onCredentialSignUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const onCredentialSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    // call api for signup
+    try {
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to sign up");
+      }
+
+      // Auto-login after successful signup
+      await signIn("credentials", { email, password, callbackUrl: "/" });
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Card className="w-full h-full p-8">
-      <CardHeader className="px-0 pt-0">
+    <Card className="w-full max-w-md mx-auto p-8 shadow-md">
+      <CardHeader className="text-center">
         <CardTitle>Create an account</CardTitle>
-        <CardDescription>Use your email or another service to continue</CardDescription>
+        <CardDescription>Sign up with email or a provider</CardDescription>
       </CardHeader>
-      {/* {!!mutation.error && (
-        <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
-          <TriangleAlert className="size-4" />
-          <p>Something went wrong</p>
+      
+      {error && (
+        <div className="bg-red-100 text-red-700 p-3 rounded-md text-sm mb-4">
+          {error}
         </div>
-      )} */} 
-      <CardContent className="space-y-5 px-0 pb-0">
-        <form onSubmit={onCredentialSignUp} className="space-y-2.5">
+      )}
+
+      <CardContent className="space-y-4">
+        <form onSubmit={onCredentialSignUp} className="space-y-3">
           <Input
-            // disabled={mutation.isPending || loading}
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Full name"
@@ -59,7 +80,6 @@ const Page = () => {
             required
           />
           <Input
-            // disabled={mutation.isPending || loading}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
@@ -67,62 +87,47 @@ const Page = () => {
             required
           />
           <Input
-            // disabled={mutation.isPending || loading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             type="password"
             required
-            minLength={3}
-            maxLength={20}
+            minLength={6}
           />
-          <Button
-            className="w-full"
-            type="submit"
-            size="lg"
-            // disabled={loading || mutation.isPending}
-          >
-            {/* {mutation.isPending ? (
-              <Loader2 className="mr-2 size-5 top-2.5 left-2.5 animate-spin" />
-            ) : (
-              "Continue"
-            )} */}
+          <Button className="w-full" type="submit" size="lg" disabled={loading}>
+            {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Sign Up"}
           </Button>
         </form>
+
         <Separator />
-        <div className="flex flex-col gap-y-2.5">
+
+        <div className="flex flex-col gap-y-2">
           <Button
-            // disabled={mutation.isPending || loading}
             onClick={() => onProviderSignUp("google")}
             variant="outline"
             size="lg"
-            className="w-full relative"
+            className="w-full flex items-center justify-center gap-2"
+            disabled={loadingGoogle}
           >
-            {loadingGoogle ? (
-              <Loader2 className="mr-2 size-5 top-2.5 left-2.5 absolute animate-spin" />
-            ) : (
-              <FcGoogle className="mr-2 size-5 top-2.5 left-2.5 absolute" />
-            )}
+            {loadingGoogle ? <Loader2 className="animate-spin size-5" /> : <FcGoogle className="size-5" />}
             Continue with Google
           </Button>
+
           <Button
-            // disabled={mutation.isPending || loading}
             onClick={() => onProviderSignUp("github")}
             variant="outline"
             size="lg"
-            className="w-full relative"
+            className="w-full flex items-center justify-center gap-2"
+            disabled={loadingGithub}
           >
-            {loadingGithub ? (
-              <Loader2 className="mr-2 size-5 top-2.5 left-2.5 absolute animate-spin" />
-            ) : (
-              <FaGithub className="mr-2 size-5 top-2.5 left-2.5 absolute" />
-            )}
-            Continue with Github
+            {loadingGithub ? <Loader2 className="animate-spin size-5" /> : <FaGithub className="size-5" />}
+            Continue with GitHub
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground">
+
+        <p className="text-xs text-muted-foreground text-center">
           Already have an account?{" "}
-          <Link href="/signin" onClick={() => setLoading(true)}>
+          <Link href="/sign-in">
             <span className="text-sky-700 hover:underline">Sign in</span>
           </Link>
         </p>
@@ -131,4 +136,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SignUpPage;

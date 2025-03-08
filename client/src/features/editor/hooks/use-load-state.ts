@@ -25,6 +25,15 @@ export const useLoadState = ({
       const data = JSON.parse(initialState.current);
 
       canvas.loadFromJSON(data, () => {
+        const clipShape = canvas.getObjects().find((obj) => obj.name === "clipShape");
+        if (clipShape) {
+          clipShape.set({
+            absolutePositioned: true
+          });
+        }
+
+        canvas.renderAll();
+
         const currentState = JSON.stringify(
           canvas.toJSON(JSON_KEYS),
         );
@@ -35,12 +44,12 @@ export const useLoadState = ({
       });
       initialized.current = true;
     }
-  }, 
-  [
-    canvas,
-    autoZoom,
-    initialState, // no need, this is a ref
-    canvasHistory, // no need, this is a ref
-    setHistoryIndex, // no need, this is a dispatch
-  ]);
+  },
+    [
+      canvas,
+      autoZoom,
+      initialState, // no need, this is a ref
+      canvasHistory, // no need, this is a ref
+      setHistoryIndex, // no need, this is a dispatch
+    ]);
 };

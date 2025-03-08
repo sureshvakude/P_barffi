@@ -63,13 +63,13 @@ export const authOptions: NextAuthOptions = {
         if (!dbUser && account) {
           // Insert user into the database
           await db.insert(schema.users).values({
-            name: user.name,
+            name: user.name || "Anonymous",
             email: user.email,
             password: "", // OAuth users don't have passwords
             userType: "user", // Default userType
           });
 
-          // Fetch the newly inserted user
+          // Fetch the newly inserted user again
           dbUser = await db.query.users.findFirst({
             where: (users, { eq }) => eq(users.email, user.email),
           });
@@ -101,6 +101,10 @@ export const authOptions: NextAuthOptions = {
   },
 
   secret: process.env.NEXTAUTH_SECRET,
+
+  pages: {
+    signIn: "/signin",
+  },
 };
 
 const handler = NextAuth(authOptions);
