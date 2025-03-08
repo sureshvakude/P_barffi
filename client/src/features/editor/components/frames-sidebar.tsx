@@ -34,7 +34,7 @@ export const FrameSidebar = ({
     >
       <ToolSidebarHeader
         title="Frames"
-        description="Add shapes to your canvas"
+        description="Add Frames to your canvas"
       />
       <ScrollArea className="flex-1 overflow-auto">
         <div className="grid grid-cols-3 gap-4 p-4">
