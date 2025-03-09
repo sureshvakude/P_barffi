@@ -477,17 +477,8 @@ const buildEditor = ({
         originY: "center",
         name: "clipShape"
       });
-
-<<<<<<< HEAD
+      
       addToCanvas(circleFrame);
-=======
-      addToCanvas(clipPath);
-      // fabric.Image.fromURL('/image-placeholder.png', function (img) {
-      //   img.set({ left: 0, top: 0 });
-      //   img.clipPath = clipPath;
-      //   canvas.add(img);
-      // });
->>>>>>> f8a4ccd38c34e23c3cafe905ac13a196c6a0fe37
     },
     addSoftRectangle: () => {
       const object = new fabric.Rect({
