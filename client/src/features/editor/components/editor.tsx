@@ -6,10 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useUpdateProject } from "@/features/projects/api/use-update-project";
 
-import {
-    ActiveTool,
-    selectionDependentTools
-} from "@/features/editor/types";
+import { ActiveTool, selectionDependentTools } from "@/features/editor/types";
 import { Navbar } from "@/features/editor/components/navbar";
 import { Footer } from "@/features/editor/components/footer";
 import { useEditor } from "@/features/editor/hooks/use-editor";
@@ -153,7 +150,7 @@ export const Editor = ({ initialData }: EditorProps) => {
                     editor={editor}
                     activeTool={activeTool}
                     onChangeActiveTool={onChangeActiveTool}
-                    />
+                />
                 <ImageSidebar
                     editor={editor}
                     activeTool={activeTool}

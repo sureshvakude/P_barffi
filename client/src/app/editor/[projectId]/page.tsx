@@ -9,15 +9,12 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 
 const EditorProjectIdPage = ({ params }: { params: Promise<{ projectId: string }> }) => {
-  // ✅ Use state to store projectId
   const [projectId, setProjectId] = React.useState<string | null>(null);
 
-  // ✅ Unwrap params using useEffect
   React.useEffect(() => {
     params.then(({ projectId }) => setProjectId(projectId)).catch(console.error);
   }, [params]);
 
-  // ✅ Ensure projectId is available before fetching data
   const { data, isLoading, isError } = useGetProject(projectId ?? "");
   if (isLoading || !data) {
     return (

@@ -1,13 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowRight, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCreateProject } from "@/features/projects/api/use-create-project";
+
+import { useSession } from "next-auth/react";
 
 export const Banner = () => {
   const router = useRouter();
   const { mutate, isPending } = useCreateProject();
+  const { data: session, status } = useSession();
 
   const onClick = () => {
     mutate(undefined, {
@@ -33,19 +37,29 @@ export const Banner = () => {
         <p className="text-xs md:text-sm mb-2">
           Turn inspiration into design in no time. Simply upload an image and let AI do the rest.
         </p>
-        <Button
-          disabled={isPending}
-          onClick={onClick}
-          variant="secondary"
-          className="w-[160px] cursor-pointer"
-        >
-          Start creating
-          {isPending ? (
-            <Loader2 className="size-4 ml-2 animate-spin" />
-          ) : (
-            <ArrowRight className="size-4 ml-2" />
-          )}
-        </Button>
+
+        {session && session.user.userType === "admin" ? (
+          <Button
+            disabled={isPending}
+            onClick={onClick}
+            variant="secondary"
+            className="w-[160px] cursor-pointer"
+          >
+            Start creating
+            {isPending ? (
+              <Loader2 className="size-4 ml-2 animate-spin" />
+            ) : (
+              <ArrowRight className="size-4 ml-2" />
+            )}
+          </Button>
+        ) : (
+          <Button
+            variant="secondary"
+            className="w-[160px] cursor-pointer"
+          >
+            Start creating 👇
+          </Button>
+        )}
       </div>
     </div>
   );
