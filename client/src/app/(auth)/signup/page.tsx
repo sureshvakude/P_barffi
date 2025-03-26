@@ -58,81 +58,83 @@ const SignUpPage = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto p-8 shadow-md">
-      <CardHeader className="text-center">
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>Sign up with email or a provider</CardDescription>
-      </CardHeader>
-      
-      {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded-md text-sm mb-4">
-          {error}
-        </div>
-      )}
+    <div className="flex min-h-screen items-center justify-center">
+      <Card className="w-full max-w-md mx-auto p-8 shadow-md">
+        <CardHeader className="text-center">
+          <CardTitle>Create an account</CardTitle>
+          <CardDescription>Sign up with email or a provider</CardDescription>
+        </CardHeader>
 
-      <CardContent className="space-y-4">
-        <form onSubmit={onCredentialSignUp} className="space-y-3">
-          <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Full name"
-            type="text"
-            required
-          />
-          <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            type="email"
-            required
-          />
-          <Input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            type="password"
-            required
-            minLength={6}
-          />
-          <Button className="w-full" type="submit" size="lg" disabled={loading}>
-            {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Sign Up"}
-          </Button>
-        </form>
+        {error && (
+          <div className="bg-red-100 text-red-700 p-3 rounded-md text-sm mb-4">
+            {error}
+          </div>
+        )}
 
-        <Separator />
+        <CardContent className="space-y-4">
+          <form onSubmit={onCredentialSignUp} className="space-y-3">
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Full name"
+              type="text"
+              required
+            />
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              type="email"
+              required
+            />
+            <Input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              type="password"
+              required
+              minLength={6}
+            />
+            <Button className="w-full" type="submit" size="lg" disabled={loading}>
+              {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Sign Up"}
+            </Button>
+          </form>
 
-        <div className="flex flex-col gap-y-2">
-          <Button
-            onClick={() => onProviderSignUp("google")}
-            variant="outline"
-            size="lg"
-            className="w-full flex items-center justify-center gap-2"
-            disabled={loadingGoogle}
-          >
-            {loadingGoogle ? <Loader2 className="animate-spin size-5" /> : <FcGoogle className="size-5" />}
-            Continue with Google
-          </Button>
+          <Separator />
 
-          <Button
-            onClick={() => onProviderSignUp("github")}
-            variant="outline"
-            size="lg"
-            className="w-full flex items-center justify-center gap-2"
-            disabled={loadingGithub}
-          >
-            {loadingGithub ? <Loader2 className="animate-spin size-5" /> : <FaGithub className="size-5" />}
-            Continue with GitHub
-          </Button>
-        </div>
+          <div className="flex flex-col gap-y-2">
+            <Button
+              onClick={() => onProviderSignUp("google")}
+              variant="outline"
+              size="lg"
+              className="w-full flex items-center justify-center gap-2"
+              disabled={loadingGoogle}
+            >
+              {loadingGoogle ? <Loader2 className="animate-spin size-5" /> : <FcGoogle className="size-5" />}
+              Continue with Google
+            </Button>
 
-        <p className="text-xs text-muted-foreground text-center">
-          Already have an account?{" "}
-          <Link href="/sign-in">
-            <span className="text-sky-700 hover:underline">Sign in</span>
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+            <Button
+              onClick={() => onProviderSignUp("github")}
+              variant="outline"
+              size="lg"
+              className="w-full flex items-center justify-center gap-2"
+              disabled={loadingGithub}
+            >
+              {loadingGithub ? <Loader2 className="animate-spin size-5" /> : <FaGithub className="size-5" />}
+              Continue with GitHub
+            </Button>
+          </div>
+
+          <p className="text-xs text-muted-foreground text-center">
+            Already have an account?{" "}
+            <Link href="/signin">
+              <span className="text-sky-700 hover:underline">Sign in</span>
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

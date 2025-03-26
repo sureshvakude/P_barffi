@@ -46,11 +46,11 @@ export const UserButton = () => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-60">
-        <DropdownMenuItem className="h-10">
+        {/* <DropdownMenuItem className="h-10">
           <CreditCard className="size-4 mr-2" />
           Billing
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator /> */}
         <DropdownMenuItem className="h-10" onClick={() => signOut()}>
           <LogOut className="size-4 mr-2" />
           Log out

@@ -45,7 +45,7 @@ export const SidebarRoutes = () => {
       </div>
 
       <ul className="flex flex-col gap-y-1 px-3">
-        <Tooltip>
+        {/* <Tooltip>
           <TooltipTrigger asChild>
             <div>
               <SidebarItem
@@ -58,7 +58,7 @@ export const SidebarRoutes = () => {
           <TooltipContent>
             <p>Billing is currently under development.</p>
           </TooltipContent>
-        </Tooltip>
+        </Tooltip> */}
 
         <SidebarItem
           href="mailto:mybanner369@gmail.com"

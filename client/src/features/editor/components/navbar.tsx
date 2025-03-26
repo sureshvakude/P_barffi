@@ -148,7 +148,7 @@ export const Navbar = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-60">
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 className="flex items-center gap-x-2"
                 onClick={() => editor?.saveJson()}
               >
@@ -159,7 +159,7 @@ export const Navbar = ({
                     Save for later editing
                   </p>
                 </div>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
                 onClick={() => editor?.savePng()}
@@ -198,7 +198,7 @@ export const Navbar = ({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <UserButton />
+          {/* <UserButton /> */}
         </div>
       </div>
     </nav>
