@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 export const Banner = () => {
   const router = useRouter();
   const { mutate, isPending } = useCreateProject();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const onClick = () => {
     mutate(undefined, {

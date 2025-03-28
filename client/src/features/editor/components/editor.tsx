@@ -3,7 +3,7 @@
 import { fabric } from "fabric";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
-
+import { useSession } from "next-auth/react";  // ✅ Import session handling
 import { useUpdateProject } from "@/features/projects/api/use-update-project";
 
 import { ActiveTool, selectionDependentTools } from "@/features/editor/types";
@@ -33,19 +33,20 @@ interface EditorProps {
 };
 
 export const Editor = ({ initialData }: EditorProps) => {
+    const { data: session } = useSession(); // ✅ Get user session
     const { mutate } = useUpdateProject(initialData.id);
 
+    // ✅ Fixed: Now saves in DB only if a session exists; otherwise, stores locally.
     const debouncedSave = useCallback(
-        debounce(
-            (values: {
-                json: string,
-                height: number,
-                width: number,
-            }) => {
-                mutate(values);
-            },
-            1000
-        ), [mutate]);
+        debounce((values: { json: string; height: number; width: number }) => {
+            if (session) {
+                mutate(values);  // Save to DB
+            } else {
+                localStorage.setItem("barffi_project", JSON.stringify(values));  // Save locally
+            }
+        }, 1000),
+        [mutate, session] // ✅ Minimal dependencies
+    );
 
     const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
@@ -63,26 +64,24 @@ export const Editor = ({ initialData }: EditorProps) => {
         saveCallback: debouncedSave,
     });
 
-    const onChangeActiveTool = useCallback((tool: ActiveTool) => {
-        if (tool === "draw") {
-            editor?.enableDrawingMode();
-        }
+    const onChangeActiveTool = useCallback(
+        (tool: ActiveTool) => {
+            if (tool === "draw") {
+                editor?.enableDrawingMode();
+            }
+            if (activeTool === "draw") {
+                editor?.disableDrawingMode();
+            }
+            setActiveTool(prevTool => (prevTool === tool ? "select" : tool));
+        },
+        [activeTool, editor]
+    );
 
-        if (activeTool === "draw") {
-            editor?.disableDrawingMode();
-        }
-
-        if (tool === activeTool) {
-            return setActiveTool("select");
-        }
-
-        setActiveTool(tool);
-    }, [activeTool, editor]);
-
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        if (!canvasRef.current || !containerRef.current) return;
         const canvas = new fabric.Canvas(canvasRef.current, {
             controlsAboveOverlay: true,
             preserveObjectStacking: true,
@@ -100,99 +99,26 @@ export const Editor = ({ initialData }: EditorProps) => {
 
     return (
         <div className="h-full flex flex-col">
-            <Navbar
-                id={initialData.id}
-                editor={editor}
-                activeTool={activeTool}
-                onChangeActiveTool={onChangeActiveTool}
-            />
+            <Navbar id={initialData.id} editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
             <div className="absolute h-[calc(100%-68px)] w-full top-[68px] flex">
-                <Sidebar
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <ShapeSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <FillColorSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <StrokeColorSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <StrokeWidthSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <OpacitySidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <TextSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <FontSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <FrameSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <ImageSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <TemplateSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <FilterSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <AiSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <RemoveBgSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <DrawSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
-                <SettingsSidebar
-                    editor={editor}
-                    activeTool={activeTool}
-                    onChangeActiveTool={onChangeActiveTool}
-                />
+                <Sidebar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <ShapeSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <FillColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <StrokeColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <StrokeWidthSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <TextSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <FontSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <FrameSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <ImageSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <TemplateSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <FilterSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <AiSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <RemoveBgSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <DrawSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+                <SettingsSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
                 <main className="bg-muted flex-1 overflow-auto relative flex flex-col">
-                    <Toolbar
-                        editor={editor}
-                        activeTool={activeTool}
-                        onChangeActiveTool={onChangeActiveTool}
-                        key={JSON.stringify(editor?.canvas.getActiveObject())}
-                    />
+                    <Toolbar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
                     <div className="flex-1 h-[calc(100%-124px)] bg-muted" ref={containerRef}>
                         <canvas ref={canvasRef} />
                     </div>

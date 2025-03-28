@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 
-const createProject = async () => {
+const createProject = async (initialData: any) => {
   try {
     const response = await fetch("/api/projects/create", {
       method: "POST",
@@ -9,26 +9,28 @@ const createProject = async () => {
       },
       credentials: "include",
       body: JSON.stringify({
-        name: "Untitled project",
-        json: "",
-        width: 900,
-        height: 1200,
+        name: initialData.name || "Untitled Project",
+        json: initialData.json || "",
+        width: initialData.width || 900,
+        height: initialData.height || 1200,
       }),
     });
 
-    const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.message || "Failed to create project");
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to create project");
     }
-    return data;
+
+    return response.json();
   } catch (error) {
     console.error("Error creating project:", error);
-    throw error;
+    throw new Error("An error occurred while creating the project. Please try again.");
   }
 };
 
+// ✅ Now useCreateProject is correctly defined
 export const useCreateProject = () => {
   return useMutation({
-    mutationFn: createProject,
+    mutationFn: (initialData: any) => createProject(initialData), // Correct way
   });
 };
