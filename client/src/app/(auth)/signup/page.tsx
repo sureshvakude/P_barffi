@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
+import { sendOtpEmail } from "@/lib/sendOtpToUser";
 
 const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,10 @@ const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState(""); // OTP state
+  const [otpSent, setOtpSent] = useState(false); // to track if OTP has been sent
+
+  const [serverOtp, setServerOtp] = useState(""); // Temporary storage for OTP from the server
 
   const onProviderSignUp = async (provider: "github" | "google") => {
     setLoading(true);
@@ -28,6 +33,40 @@ const SignUpPage = () => {
     setLoadingGoogle(provider === "google");
 
     await signIn(provider, { callbackUrl: "/" });
+  };
+
+  const sendOtp = async () => {
+    if (!name || !email || !password) {
+      setError("Name, email, and password are required.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const otpCode = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a random OTP (6 digits)
+      setServerOtp(otpCode); // Save the OTP temporarily
+      const result = await sendOtpEmail(email, otpCode);
+
+      if (result.success) {
+        setOtpSent(true); // Mark OTP as sent
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyOtp = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (otp === serverOtp) {
+      // OTP matches, proceed to sign-up
+      onCredentialSignUp(e);
+    } else {
+      setError("Invalid OTP. Please try again.");
+    }
   };
 
   const onCredentialSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,33 +111,48 @@ const SignUpPage = () => {
         )}
 
         <CardContent className="space-y-4">
-          <form onSubmit={onCredentialSignUp} className="space-y-3">
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full name"
-              type="text"
-              required
-            />
-            <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              type="email"
-              required
-            />
-            <Input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              type="password"
-              required
-              minLength={6}
-            />
-            <Button className="w-full" type="submit" size="lg" disabled={loading}>
-              {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Sign Up"}
-            </Button>
-          </form>
+          {!otpSent ? (
+            <form onSubmit={(e) => { e.preventDefault(); sendOtp(); }} className="space-y-3">
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Full name"
+                type="text"
+                required
+              />
+              <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                type="email"
+                required
+              />
+              <Input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                type="password"
+                required
+                minLength={6}
+              />
+              <Button className="w-full" type="submit" size="lg" disabled={loading}>
+                {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Send OTP"}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={verifyOtp} className="space-y-3">
+              <Input
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                placeholder="Enter OTP"
+                type="text"
+                required
+              />
+              <Button className="w-full" type="submit" size="lg" disabled={loading}>
+                {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Verify OTP"}
+              </Button>
+            </form>
+          )}
 
           <Separator />
 
