@@ -8,7 +8,7 @@ import { useAdminProjects } from "@/features/projects/hooks/useGetAdminProjects"
 export const TemplatesSection = () => {
     const router = useRouter();
     const { data: projects, isLoading, isError } = useAdminProjects();
-
+    
     if (isLoading) {
         return (
             <div className="space-y-4">
