@@ -46,7 +46,7 @@ const EditorProjectIdPage = ({ params }: { params: Promise<{ projectId: string }
 
   if (isLoading || !projectData) {
     return (
-      <div className="h-full flex flex-col items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center">
         <Loader className="size-6 animate-spin text-muted-foreground" />
       </div>
     );

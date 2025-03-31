@@ -45,14 +45,14 @@ export const TemplatesSection = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4">
                     {projects?.map((template: any) => (
                         <TemplateCard
-                            key={template.id}
-                            title={template.name}
-                            imageSrc={template.thumbnail || ""}
-                            onClick={() => router.push(`/editor/${template.id}`)}
-                            description={`${template.width} x ${template.height} px`}
-                            width={template.width}
-                            height={template.height}
-                            isPro={template.isPro}
+                            key={template?.id}
+                            title={template?.name}
+                            imageSrc={template?.thumbnail || ""}
+                            onClick={() => router.push(`/editor/${template?.id}`)}
+                            description={`${template?.width} x ${template?.height} px`}
+                            width={template?.width}
+                            height={template?.height}
+                            isPro={template?.isPro}
                         />
                     ))}
                 </div>

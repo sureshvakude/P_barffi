@@ -7,26 +7,50 @@ import { projects } from "@/db/schema";
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    const userId = session?.user?.id ? parseInt(session.user.id) : 0; // ✅ Avoid `null`
+    const userId = session?.user?.id ? parseInt(session.user.id) : 0;
 
-    const { name = "Untitled project", json = "", width = 900, height = 1200 } = await req.json();
+    // Parse request body
+    const body = await req.json();
 
-    if (!name || !width || !height) {
+    // Assign default values with type safety
+    const name = body?.name?.trim() || "Untitled project";
+    const width = typeof body?.width === "number" ? body.width : 900;
+    const height = typeof body?.height === "number" ? body.height : 1200;
+    const thumbnail = body?.thumbnail ?? null;
+    const isPro = Boolean(body?.isPro);
+    const prize = body?.prize !== undefined ? Number(body.prize) : null;
+    const isTemplate = Boolean(body?.isTemplate);
+    const userType = session?.user?.userType ?? "guest";
+
+    // Validate JSON field
+    let json;
+    try {
+      json = JSON.stringify(body?.json ?? "");
+    } catch (error) {
+      return NextResponse.json({ message: "Invalid JSON format" }, { status: 400 });
+    }
+
+    // Ensure required fields exist
+    if (!name || !json || !width || !height) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
-    // ✅ Use `$returningId()` for MySQL to return the inserted project's ID
+    // Insert project into the database
     const newProjectId = await db
       .insert(projects)
       .values({
-        userId, // ✅ Will be `undefined` if not authenticated
+        userId,
         name,
         height,
         width,
+        thumbnail,
         json,
-        userType: session?.user?.userType ?? "guest",
+        userType,
+        isPro,
+        prize,
+        isTemplate,
       })
-      .$returningId(); // ✅ MySQL-specific return statement
+      .$returningId();
 
     return NextResponse.json(
       { message: "Project created successfully", projectId: newProjectId },

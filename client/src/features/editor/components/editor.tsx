@@ -3,9 +3,8 @@
 import { fabric } from "fabric";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";  // ✅ Import session handling
+import { useSession } from "next-auth/react";
 import { useUpdateProject } from "@/features/projects/api/use-update-project";
-
 import { ActiveTool, selectionDependentTools } from "@/features/editor/types";
 import { Navbar } from "@/features/editor/components/navbar";
 import { Footer } from "@/features/editor/components/footer";
@@ -33,19 +32,18 @@ interface EditorProps {
 };
 
 export const Editor = ({ initialData }: EditorProps) => {
-    const { data: session } = useSession(); // ✅ Get user session
+    const { data: session } = useSession();
     const { mutate } = useUpdateProject(initialData.id);
 
-    // ✅ Fixed: Now saves in DB only if a session exists; otherwise, stores locally.
     const debouncedSave = useCallback(
         debounce((values: { json: string; height: number; width: number }) => {
             if (session) {
-                mutate(values);  // Save to DB
+                mutate(values);
             } else {
-                localStorage.setItem("barffi_project", JSON.stringify(values));  // Save locally
+                localStorage.setItem("barffi_project", JSON.stringify(values));
             }
         }, 1000),
-        [mutate, session] // ✅ Minimal dependencies
+        [mutate, session]
     );
 
     const [activeTool, setActiveTool] = useState<ActiveTool>("select");
