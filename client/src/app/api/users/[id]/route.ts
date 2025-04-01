@@ -3,9 +3,10 @@ import { db, schema } from "@/db/db";
 import { eq } from "drizzle-orm";
 
 // 🟢 Get a Single User
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
-    const user = await db.select().from(schema.users).where(eq(schema.users.id, Number(params.id)));
+    const { id } = await context.params; // ✅ Ensure params is awaited properly
+    const user = await db.select().from(schema.users).where(eq(schema.users.id, Number(id)));
 
     if (!user.length) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -19,13 +20,14 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
 // 🟢 Update a User
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await context.params;
     const body = await req.json();
 
     await db.update(schema.users)
       .set(body)
-      .where(eq(schema.users.id, Number(params.id)));
+      .where(eq(schema.users.id, Number(id)));
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
@@ -35,9 +37,10 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 // 🟢 Delete a User
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
-    await db.delete(schema.users).where(eq(schema.users.id, Number(params.id)));
+    const { id } = await context.params; // ✅ Await params to resolve properly
+    await db.delete(schema.users).where(eq(schema.users.id, Number(id)));
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

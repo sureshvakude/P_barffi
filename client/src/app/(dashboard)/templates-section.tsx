@@ -34,7 +34,7 @@ export const TemplatesSection = () => {
 
     return (
         <div>
-            <h3 className="font-semibold text-lg">Start from a template</h3>
+            <h3 className="font-semibold text-lg">Start from a pre-defined Templates</h3>
 
             {projects && projects.length === 0 ? (
                 <div className="flex flex-col gap-y-4 items-center justify-center h-32">

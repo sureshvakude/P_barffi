@@ -135,7 +135,7 @@ const SignUpPage = () => {
                 required
                 minLength={6}
               />
-              <Button className="w-full" type="submit" size="lg" disabled={loading}>
+              <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300" type="submit" size="lg" disabled={loading}>
                 {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Send OTP"}
               </Button>
             </form>
@@ -148,7 +148,7 @@ const SignUpPage = () => {
                 type="text"
                 required
               />
-              <Button className="w-full" type="submit" size="lg" disabled={loading}>
+              <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300" type="submit" size="lg" disabled={loading}>
                 {loading ? <Loader2 className="animate-spin size-5 mr-2" /> : "Verify OTP"}
               </Button>
             </form>

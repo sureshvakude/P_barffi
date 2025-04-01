@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { CreditCard, LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -36,7 +36,6 @@ export const UserButton = () => {
             <Crown className="size-3 text-yellow-500 fill-yellow-500" />
           </div>
         </div> */}
-
         <Avatar className="size-10 hover:opacity-75 transition">
           <AvatarImage alt={name} src={imageUrl} />
           <AvatarFallback className="bg-blue-500 font-medium text-white flex items-center justify-center">
@@ -51,6 +50,11 @@ export const UserButton = () => {
           Billing
         </DropdownMenuItem>
         <DropdownMenuSeparator /> */}
+        <DropdownMenuItem className="h-10" onClick={() => router.push("/profile")}>
+          <User className="size-4 mr-2" />
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem className="h-10" onClick={() => signOut()}>
           <LogOut className="size-4 mr-2" />
           Log out

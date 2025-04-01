@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { AlertTriangle, CopyIcon, FileIcon, Loader, MoreHorizontal, Search, Trash } from "lucide-react";
@@ -10,14 +11,16 @@ import { DropdownMenuContent, DropdownMenu, DropdownMenuItem, DropdownMenuTrigge
 import { Table, TableRow, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import { useDeleteProject } from "@/features/projects/api/use-delete-project";
 
 export const ProjectsSection = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [localProjects, setLocalProjects] = useState<any[]>([]);
+  const { deleteProject } = useDeleteProject();
 
   // Fetch projects from database if logged in
-  const { data: projects, isLoading, isError } = useUserProjects({ enabled: !!session });
+  const { data: projects, isLoading, isError, refetch } = useUserProjects({ enabled: !!session });
 
   // If no session, get projects from localStorage
   useEffect(() => {
@@ -66,6 +69,13 @@ export const ProjectsSection = () => {
     );
   }
 
+  const handleDelete = async (id: string) => {
+    const result = await deleteProject(id);
+    if (result.success && session) {
+      refetch();
+    }
+  };
+
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-lg">Recent projects</h3>
@@ -77,7 +87,13 @@ export const ProjectsSection = () => {
                 onClick={() => router.push(`/project-editor/${project.id}`)}
                 className="font-medium flex items-center gap-x-2 cursor-pointer"
               >
-                <FileIcon className="size-6" />
+                <Image
+                  src={project.thumbnail || "/uploads/placeholder.jpg"}
+                  alt="Project thumbnail"
+                  width={40}
+                  height={40}
+                  className="rounded-md"
+                />
                 {project.name}
               </TableCell>
               <TableCell
@@ -103,11 +119,11 @@ export const ProjectsSection = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-60">
-                    <DropdownMenuItem className="h-10 cursor-pointer" onClick={() => console.log("Copy project", project.id)}>
+                    {/* <DropdownMenuItem className="h-10 cursor-pointer" onClick={() => console.log("Copy project", project.id)}>
                       <CopyIcon className="size-4 mr-2" />
                       Make a copy
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="h-10 cursor-pointer" onClick={() => console.log("Delete project", project.id)}>
+                    </DropdownMenuItem> */}
+                    <DropdownMenuItem className="h-10 cursor-pointer" onClick={() => handleDelete(project.id)}>
                       <Trash className="size-4 mr-2" />
                       Delete
                     </DropdownMenuItem>
