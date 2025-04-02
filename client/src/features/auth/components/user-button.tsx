@@ -24,6 +24,11 @@ export const UserButton = () => {
     );
   }
 
+  const handleLogout = async () => {
+    await signOut();
+    window.location.href = "/";
+  }
+
   const name = session.user?.name || "Guest";
   const imageUrl = session.user?.image || "";
 
@@ -54,7 +59,7 @@ export const UserButton = () => {
           Profile
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="h-10" onClick={() => signOut()}>
+        <DropdownMenuItem className="h-10" onClick={() => handleLogout()}>
           <LogOut className="size-4 mr-2" />
           Log out
         </DropdownMenuItem>

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
 import { sendOtpEmail } from "@/lib/sendOtpToUser";
+import { SessionStrategy } from "next-auth";
 
 const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
@@ -80,8 +81,7 @@ const SignUpPage = () => {
         throw new Error(data.error || "Failed to sign up");
       }
 
-      // Auto-login after successful signup
-      await signIn("credentials", { email, password, callbackUrl: "/" });
+      window.location.href = "/signin";
     } catch (error: any) {
       setError(error.message);
     } finally {

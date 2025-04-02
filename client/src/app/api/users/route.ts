@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db, schema } from "@/db/db";
+import bcrypt from "bcrypt";
 // import { eq } from "drizzle-orm";
 // import { getServerSession } from "next-auth";
 
@@ -24,10 +25,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Name, email, and password are required" }, { status: 400 });
     }
 
+    const hashedPassword = await bcrypt.hash(body.password, 10);
+
     const newUser = await db.insert(schema.users).values({
       name: body.name,
       email: body.email,
-      password: body.password, // Hash password before storing in production!
+      password: hashedPassword,
       img: body.img || null,
       userType: body.userType || "user",
     });
