@@ -5,9 +5,9 @@ import { projects } from "@/db/schema";
 
 export async function GET(req: Request, context: { params: Promise<{ projectId: string }> }) {
   try {
-    const { projectId } = await context.params; // ✅ Await params
+    const { projectId } = await context.params;
 
-    const projectIdNumber = Number(projectId); // Convert to a number
+    const projectIdNumber = Number(projectId);
     if (isNaN(projectIdNumber)) {
       return NextResponse.json({ error: "Invalid project ID" }, { status: 400 });
     }

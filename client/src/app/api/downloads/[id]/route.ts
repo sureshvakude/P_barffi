@@ -5,10 +5,8 @@ import { eq } from "drizzle-orm";
 // 🟢 Get Downloads by User ID
 export async function GET(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
-    // Convert userId to a number (or handle it as appropriate for your system)
     const { id } = await context.params;
 
-    // Fetch downloads where the userId matches the parameter
     const downloads = await db
       .select()
       .from(schema.downloads)

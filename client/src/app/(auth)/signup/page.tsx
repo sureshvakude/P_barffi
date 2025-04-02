@@ -6,7 +6,6 @@ import { signIn } from "next-auth/react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Loader2 } from "lucide-react";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -18,20 +17,17 @@ const SignUpPage = () => {
   const [loadingGithub, setLoadingGithub] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [otp, setOtp] = useState(""); // OTP state
-  const [otpSent, setOtpSent] = useState(false); // to track if OTP has been sent
-
-  const [serverOtp, setServerOtp] = useState(""); // Temporary storage for OTP from the server
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [serverOtp, setServerOtp] = useState("");
 
   const onProviderSignUp = async (provider: "github" | "google") => {
     setLoading(true);
     setLoadingGithub(provider === "github");
     setLoadingGoogle(provider === "google");
-
     await signIn(provider, { callbackUrl: "/" });
   };
 
@@ -40,15 +36,13 @@ const SignUpPage = () => {
       setError("Name, email, and password are required.");
       return;
     }
-
     setLoading(true);
     try {
       const otpCode = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a random OTP (6 digits)
-      setServerOtp(otpCode); // Save the OTP temporarily
+      setServerOtp(otpCode);
       const result = await sendOtpEmail(email, otpCode);
-
       if (result.success) {
-        setOtpSent(true); // Mark OTP as sent
+        setOtpSent(true);
       } else {
         throw new Error(result.message);
       }
@@ -62,7 +56,6 @@ const SignUpPage = () => {
   const verifyOtp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (otp === serverOtp) {
-      // OTP matches, proceed to sign-up
       onCredentialSignUp(e);
     } else {
       setError("Invalid OTP. Please try again.");

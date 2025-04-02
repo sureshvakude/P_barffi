@@ -41,7 +41,6 @@ const createProject = async (initialData: CreateProjectRequest): Promise<CreateP
       const errorText = await response.text();
       throw new Error(`Failed to create project: ${errorText}`);
     }
-    console.log("project",response);
     return response.json();
   } catch (error: any) {
     console.error("Error creating project:", error);

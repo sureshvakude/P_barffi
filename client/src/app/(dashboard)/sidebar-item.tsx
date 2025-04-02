@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 
 interface SidebarItemProps {
@@ -11,13 +10,7 @@ interface SidebarItemProps {
   onClick?: () => void;
 };
 
-export const SidebarItem = ({
-  icon: Icon,
-  label,
-  href,
-  isActive,
-  onClick,
-}: SidebarItemProps) => {
+export const SidebarItem = ({ icon: Icon, label, href, isActive, onClick, }: SidebarItemProps) => {
   return (
     <Link href={href} onClick={onClick}>
       <div className={cn(

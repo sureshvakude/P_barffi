@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 const EditorProjectIdPage = ({ params }: { params: Promise<{ projectId: string }> }) => {
   const [projectId, setProjectId] = useState<string | null>(null);
   const [localProject, setLocalProject] = useState<any>(null);
-  const [newProjectData, setNewProjectData] = useState<any>(null); // New state to store created project
+  const [newProjectData, setNewProjectData] = useState<any>(null);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const EditorProjectIdPage = ({ params }: { params: Promise<{ projectId: string }
       if (session) {
         try {
           const newProject = await createProjectMutation.mutateAsync(data);
-          setNewProjectData({ ...data, id: newProject?.projectId?.[0]?.id }); // Store new project in state
+          setNewProjectData({ ...data, id: newProject?.projectId }); // Store new project in state
         } catch (error) {
           console.error("Project creation error:", error);
         }

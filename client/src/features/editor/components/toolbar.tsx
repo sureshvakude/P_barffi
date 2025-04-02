@@ -18,7 +18,8 @@ import {
   AlignRight,
   Trash,
   SquareSplitHorizontal,
-  Copy
+  Copy,
+  FlipHorizontal2Icon
 } from "lucide-react";
 
 import { isTextType } from "@/features/editor/utils";
@@ -384,6 +385,18 @@ export const Toolbar = ({
               )}
             >
               <SquareSplitHorizontal className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+      {isImage && (
+        <div className="flex items-center h-full justify-center">
+          <Hint label="Flip Image" side="bottom" sideOffset={5}>
+            <Button
+              onClick={() => editor?.flipImage()}
+              size="icon"
+              variant="ghost">
+              <FlipHorizontal2Icon className="size-4" />
             </Button>
           </Hint>
         </div>

@@ -5,10 +5,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Loader2, TriangleAlert } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -19,10 +17,8 @@ const Page = () => {
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingGithub, setLoadingGithub] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const params = useSearchParams();
   const error = params.get("error");
 
@@ -30,7 +26,6 @@ const Page = () => {
     setLoading(true);
     setLoadingGithub(provider === "github");
     setLoadingGoogle(provider === "google");
-
     signIn(provider, { callbackUrl: "/" });
   };
 
@@ -38,7 +33,6 @@ const Page = () => {
     e.preventDefault();
     setLoading(true);
     setLoadingLogin(true);
-
     signIn("credentials", {
       email: email,
       password: password,

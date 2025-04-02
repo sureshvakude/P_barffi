@@ -6,7 +6,7 @@ const createProject = async (projectData: { name: string; description?: string }
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include", // Ensures authentication cookies are sent
+        credentials: "include",
         body: JSON.stringify(projectData),
     });
 
@@ -24,10 +24,7 @@ export const useCreateProject = () => {
     return useMutation({
         mutationFn: createProject,
         onSuccess: (data) => {
-            // Optimistically update the UI by invalidating the userProjects query
             queryClient.invalidateQueries({ queryKey: ["userProjects"] });
-
-            // Optional: Redirect user or show success message
         },
         onError: (error) => {
             console.error("Error creating project:", error);

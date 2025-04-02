@@ -6,7 +6,7 @@ const fetchUserProjects = async () => {
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include", // Ensures authentication cookies are sent
+        credentials: "include",
     });
 
     if (!response.ok) {

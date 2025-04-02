@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { db, schema } from "@/db/db"; // Adjust the path to your DB config
+import { db, schema } from "@/db/db";
 
 export async function POST(req: Request) {
   try {

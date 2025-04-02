@@ -1,17 +1,15 @@
 "use client";
 
-import { CreditCard, Crown, Home, MessageCircleQuestion } from "lucide-react";
+import { Crown, Home, MessageCircleQuestion } from "lucide-react";
+// import { CreditCard } from "lucide-react";
 import { usePathname } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
 import { SidebarItem } from "./sidebar-item";
 
 export const SidebarRoutes = () => {
   const pathname = usePathname();
-
   return (
     <div className="flex flex-col gap-y-4 flex-1">
       <div className="px-3">

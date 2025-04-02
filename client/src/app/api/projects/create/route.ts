@@ -9,10 +9,8 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id ? parseInt(session.user.id) : 0;
 
-    // Parse request body
     const body = await req.json();
 
-    // Assign default values with type safety
     const name = body?.name?.trim() || "Untitled project";
     const width = typeof body?.width === "number" ? body.width : 900;
     const height = typeof body?.height === "number" ? body.height : 1200;
@@ -53,7 +51,7 @@ export async function POST(req: NextRequest) {
       .$returningId();
 
     return NextResponse.json(
-      { message: "Project created successfully", projectId: newProjectId },
+      { message: "Project created successfully", projectId:newProjectId[0].id },
       { status: 201 }
     );
   } catch (error: any) {

@@ -411,6 +411,14 @@ const buildEditor = ({
       const workspace = getWorkspace();
       workspace?.sendToBack();
     },
+    flipImage: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (object.type === "image") {
+          object.set('flipX', !object.flipX);
+        }
+      });
+      canvas.renderAll();
+    },
     changeFontFamily: (value: string) => {
       setFontFamily(value);
       canvas.getActiveObjects().forEach((object) => {
@@ -477,7 +485,7 @@ const buildEditor = ({
         originY: "center",
         name: "clipShape"
       });
-      
+
       addToCanvas(circleFrame);
     },
     addSoftRectangle: () => {

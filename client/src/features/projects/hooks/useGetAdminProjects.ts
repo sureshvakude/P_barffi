@@ -6,7 +6,7 @@ const fetchAdminProjects = async () => {
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include", // Ensure cookies/session are sent
+        credentials: "include",
     });
 
     if (!response.ok) {

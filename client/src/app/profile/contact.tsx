@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getSession } from "next-auth/react";
-import { Eye, EyeOff } from "lucide-react"; // ✅ Import icons
+// import { Eye, EyeOff } from "lucide-react"; // ✅ Import icons
 
 export const ContactInfo = () => {
     const [formData, setFormData] = useState<{
@@ -20,7 +20,7 @@ export const ContactInfo = () => {
     });
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
-    const [passwordVisible, setPasswordVisible] = useState(false); // ✅ State for toggling password
+    // const [passwordVisible, setPasswordVisible] = useState(false);
 
     // Fetch user ID from session
     useEffect(() => {

@@ -19,7 +19,7 @@ export const Banner = () => {
       {
         onSuccess: (data) => {
           if (data) {
-            router.push(`/editor/${data?.projectId[0].id}`);
+            router.push(`/editor/${data?.projectId}`);
           } else {
             console.error("Project ID missing:", data);
           }
