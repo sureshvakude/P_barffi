@@ -15,7 +15,6 @@ export const projects = mysqlTable("projects", {
   name: varchar("name", { length: 255 }).notNull(),
   height: int("height").notNull(),
   width: int("width").notNull(),
-  thumbnail: varchar("thumbnail", { length: 500 }),
   json: json("json").notNull(),
   userType: varchar("userType", { length: 100 }).notNull(),
   isPro: boolean("isPro").default(false),

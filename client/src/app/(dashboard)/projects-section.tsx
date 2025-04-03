@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { formatDistanceToNow } from "date-fns";
 import { AlertTriangle, Loader, MoreHorizontal, Search, Trash } from "lucide-react";
 // import { CopyIcon, FileIcon } from "lucide-react";
 import { useUserProjects } from "@/features/projects/hooks/useGetUserProjects";
@@ -87,13 +86,13 @@ export const ProjectsSection = () => {
                 onClick={() => router.push(`/project-editor/${project.id}`)}
                 className="font-medium flex items-center gap-x-2 cursor-pointer"
               >
-                <Image
+                {/* <Image
                   src={project.thumbnail || "/uploads/placeholder.jpg"}
                   alt="Project thumbnail"
                   width={40}
                   height={40}
                   className="rounded-md"
-                />
+                /> */}
                 {project.name}
               </TableCell>
               <TableCell

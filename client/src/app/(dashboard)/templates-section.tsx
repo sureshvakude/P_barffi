@@ -8,7 +8,7 @@ import { useAdminProjects } from "@/features/projects/hooks/useGetAdminProjects"
 export const TemplatesSection = () => {
     const router = useRouter();
     const { data: projects, isLoading, isError } = useAdminProjects();
-    
+
     if (isLoading) {
         return (
             <div className="space-y-4">
@@ -42,14 +42,13 @@ export const TemplatesSection = () => {
                     <p>No templates found</p>
                 </div>
             ) : (
-                <div className="flex flex-wrap align-items gap-4 mt-4">
+                <div className="flex flex-wrap items-center jusitfy-center gap-4 mt-4">
                     {projects?.map((template: any) => (
                         <TemplateCard
                             key={template?.id}
                             title={template?.name}
                             canvasJson={template?.json || ""}
                             onClick={() => router.push(`/editor/${template?.id}`)}
-                            description={`${template?.width} x ${template?.height} px`}
                             width={template?.width}
                             height={template?.height}
                             isPro={template?.isPro}

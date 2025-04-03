@@ -28,7 +28,6 @@ export async function POST(req: Request) {
       name,
       email,
       password: hashedPassword,
-      userType: userType ?? "user", // Default userType is "user"
     });
 
     return NextResponse.json({ message: "User registered successfully", user: newUser }, { status: 201 });
