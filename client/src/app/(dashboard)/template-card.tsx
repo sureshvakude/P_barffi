@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import React from "react";
+import { fabric } from "fabric";
 
 interface TemplateCardProps {
-  imageSrc: string;
+  canvasJson: string;
   title: string;
   onClick: () => void;
   disabled?: boolean;
@@ -13,44 +15,36 @@ interface TemplateCardProps {
   isPro: boolean | null;
 };
 
-export const TemplateCard = ({ imageSrc, title, onClick, disabled, description, height, width, isPro }: TemplateCardProps) => {
+export const TemplateCard = ({ canvasJson, title, onClick, disabled, description, height, width, isPro }: TemplateCardProps) => {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const fabricCanvasRef = React.useRef<fabric.Canvas | null>(null);
+
+  React.useEffect(() => {
+    if (canvasRef.current) {
+      // Initialize Fabric.js canvas
+      fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
+        selection: false,
+        interactive: false // Ensures it's non-editable
+      });
+
+      // Load JSON into Fabric.js
+      if (canvasJson) {
+        fabricCanvasRef.current.loadFromJSON(canvasJson, () => {
+          fabricCanvasRef.current?.renderAll();
+        });
+      }
+    }
+
+    return () => {
+      fabricCanvasRef.current?.dispose(); // Cleanup on unmount
+    };
+  }, [canvasJson]);
+
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
-        "space-y-2 group text-left transition flex flex-col",
-        disabled ? "cursor-not-allowed opacity-75" : "cursor-pointer"
-      )}
-    >
-      <div
-        style={{ aspectRatio: `${width}/${height}` }}
-        className="relative rounded-xl h-full w-full overflow-hidden border">
-        <Image
-          fill
-          src={imageSrc || "/uploads/placeholder.jpg"}
-          alt={title}
-          className=" object-cover transition transform group-hover:scale-105"
-        />
-        {isPro && (
-          <div className="absolute top-2 right-2 h-10 w-10 flex items-center justify-center bg-black/50 rounded-full -z[10]">
-            <Crown className="size-5 fill-yellow-500 text-yellow-500" />
-          </div>
-        )}
-        <div className="opacity-0 group-hover:opacity-100 transition absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl backdrop-filter backdrop-blur-sm">
-          <p className="text-white font-medium">
-            Open in editor
-          </p>
-        </div>
-      </div>
-      <div className="space-y-1">
-        <p className="text-sm font-medium">
-          {title}
-        </p>
-        <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-75 transition">
-          {description}
-        </p>
-      </div>
+    <button onClick={onClick} disabled={disabled}
+      style={{ width: width / 5, height: height / 5 }}
+      className={`bg-slate-100 cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out relative overflow-hidden`}>
+      <canvas ref={canvasRef} width={width / 5} height={height / 5} />
     </button>
   )
 }

@@ -106,9 +106,7 @@ export const ProjectsSection = () => {
                 onClick={() => router.push(`/project-editor/${project.id}`)}
                 className="hidden md:table-cell cursor-pointer"
               >
-                {project.updatedAt && !isNaN(new Date(project.updatedAt).getTime())
-                  ? formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })
-                  : "Unknown"}
+                {project.updatedAt && getTimeAgo(project?.updatedAt)}
 
               </TableCell>
               <TableCell className="flex items-center justify-end">
@@ -137,3 +135,17 @@ export const ProjectsSection = () => {
     </div>
   );
 };
+
+// Helper function to format "time ago"
+function getTimeAgo(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+  if (diffInSeconds < 60) return "just now";
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+  return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+}

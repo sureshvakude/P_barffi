@@ -30,9 +30,7 @@ export async function POST(req: Request) {
     const newUser = await db.insert(schema.users).values({
       name: body.name,
       email: body.email,
-      password: hashedPassword,
-      img: body.img || null,
-      userType: body.userType || "user",
+      password: hashedPassword
     });
 
     return NextResponse.json({ success: true, user: newUser }, { status: 201 });

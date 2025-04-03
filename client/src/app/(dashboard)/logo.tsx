@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Space_Grotesk } from "next/font/google";
+// import { Space_Grotesk } from "next/font/google";
 
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 
-const font = Space_Grotesk({
-  weight: ["700"],
-  subsets: ["latin"],
-});
+// const font = Space_Grotesk({
+//   weight: ["700"],
+//   subsets: ["latin"],
+// });
 
 export const Logo = () => {
   return (

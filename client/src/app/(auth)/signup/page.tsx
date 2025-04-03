@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
 import { sendOtpEmail } from "@/lib/sendOtpToUser";
-import { SessionStrategy } from "next-auth";
 
 const SignUpPage = () => {
   const [loading, setLoading] = useState(false);

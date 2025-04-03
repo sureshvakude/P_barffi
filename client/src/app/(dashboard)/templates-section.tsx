@@ -42,12 +42,12 @@ export const TemplatesSection = () => {
                     <p>No templates found</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4">
+                <div className="flex flex-wrap align-items gap-4 mt-4">
                     {projects?.map((template: any) => (
                         <TemplateCard
                             key={template?.id}
                             title={template?.name}
-                            imageSrc={template?.thumbnail || ""}
+                            canvasJson={template?.json || ""}
                             onClick={() => router.push(`/editor/${template?.id}`)}
                             description={`${template?.width} x ${template?.height} px`}
                             width={template?.width}
