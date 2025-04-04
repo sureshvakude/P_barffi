@@ -252,6 +252,8 @@ export interface Editor {
   changeStrokeDashArray: (value: number[]) => void;
   addCircle: () => void;
   addCircleFrame: () => void;
+  addDiamondFrame: () => void;
+  addRectFrame: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
   addTriangle: () => void;

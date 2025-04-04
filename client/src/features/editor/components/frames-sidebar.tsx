@@ -1,5 +1,5 @@
-// import { IoTriangle } from "react-icons/io5";
-// import { FaDiamond } from "react-icons/fa6";
+import { TbRectangleFilled } from "react-icons/tb";
+import { FaDiamond } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa";
 // import {FaSquare, FaSquareFull } from "react-icons/fa";
 
@@ -42,6 +42,14 @@ export const FrameSidebar = ({
           <ShapeTool
             onClick={() => editor?.addCircleFrame()}
             icon={FaCircle}
+          />
+          <ShapeTool
+            onClick={() => editor?.addDiamondFrame()}
+            icon={FaDiamond}
+          />
+          <ShapeTool
+            onClick={() => editor?.addRectFrame()}
+            icon={TbRectangleFilled}
           />
         </div>
       </ScrollArea>

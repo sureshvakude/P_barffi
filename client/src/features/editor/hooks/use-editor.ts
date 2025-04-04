@@ -488,6 +488,28 @@ const buildEditor = ({
 
       addToCanvas(circleFrame);
     },
+    addDiamondFrame: () => {
+      const diamondFrame = new fabric.Path("M50 0 L100 50 L50 100 L0 50 Z", {
+        opacity: 0.2,
+        absolutePositioned: true,
+        originX: "center",
+        originY: "center",
+        name: "clipShape"
+      });
+
+      addToCanvas(diamondFrame);
+    },
+    addRectFrame: () => {
+      const rectFrame = new fabric.Path("M0 0 H100 V100 H0 Z", {
+        opacity: 0.2,
+        absolutePositioned: true,
+        originX: "center",
+        originY: "center",
+        name: "clipShape"
+      });
+
+      addToCanvas(rectFrame);
+    },
     addSoftRectangle: () => {
       const object = new fabric.Rect({
         ...RECTANGLE_OPTIONS,
@@ -814,14 +836,14 @@ export const useEditor = ({
 
 const checkAndApplyClipping = (img, canvas) => {
   const objects = canvas.getObjects();
-  const shape = objects.find((obj: { name: string; }) => obj.name === "clipShape");
+  const clipShapes = objects.filter((obj: { name: string; }) => obj.name === "clipShape");
 
-  if (shape) {
+  img.clipPath = null;
+  
+  for (const shape of clipShapes) {
     if (img.intersectsWithObject(shape)) {
       img.clipPath = shape;
-    } else {
-      img.clipPath = null;
+      break;
     }
-    canvas.renderAll();
   }
 }

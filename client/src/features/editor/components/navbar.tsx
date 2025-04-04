@@ -86,6 +86,25 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
     setIsModalOpen(false);
   };
 
+  const handleDownload = (type: string) => {
+    switch (type) {
+      case "json":
+        editor?.saveJson();
+        break;
+      case "png":
+        editor?.savePng();
+        break;
+      case "jpg":
+        editor?.saveJpg();
+        break;
+      case "svg":
+        editor?.saveSvg();
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[34px]">
       <Logo />
@@ -191,7 +210,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
               </DropdownMenuItem> */}
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => editor?.savePng()}
+                onClick={() => handleDownload("png")}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -203,7 +222,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => editor?.saveJpg()}
+                onClick={() => handleDownload("jpg")}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -215,7 +234,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => editor?.saveSvg()}
+                onClick={() => handleDownload("svg")}
               >
                 <CiFileOn className="size-8" />
                 <div>
