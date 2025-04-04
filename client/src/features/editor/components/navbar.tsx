@@ -86,7 +86,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
     setIsModalOpen(false);
   };
 
-  const handleDownload = (type: string) => {
+  const handleDownload = async (type: string) => {
     switch (type) {
       case "json":
         editor?.saveJson();
@@ -103,7 +103,24 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
       default:
         break;
     }
-  }
+  
+    // Log download after a short delay to ensure the download completes
+    setTimeout(async () => {
+      if (!session?.user?.id) return;
+      try {
+        await fetch("/api/downloads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: session.user.id,
+            projectId: parseInt(id), // id is a string, convert to number
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to log download:", err);
+      }
+    }, 300); // Adjust delay if needed
+  };
 
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[34px]">

@@ -1,47 +1,49 @@
 import { NextResponse } from "next/server";
-import { db, schema } from "@/db/db";
-// import { eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
+import { db } from "@/db/db";
+import { downloads } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 
-// 🟢 Get All Downloads (Admin Only)
-export async function GET() {
-  try {
-    const session = await getServerSession();
-    if (!session || session.user.userType !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const downloads = await db.select().from(schema.downloads);
-    return NextResponse.json(downloads, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching downloads:", error);
-    return NextResponse.json({ error: "Failed to fetch downloads" }, { status: 500 });
-  }
-}
-
-// 🟢 Create a New Download Record
+// POST /api/downloads
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession();
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body = await req.json();
+    const { userId, projectId } = body;
 
-    if (!body.projectId) {
-      return NextResponse.json({ error: "Project ID is required" }, { status: 400 });
+    if (!userId || !projectId) {
+      return NextResponse.json({ error: "Missing userId or projectId" }, { status: 400 });
     }
 
-    const newDownload = await db.insert(schema.downloads).values({
-      userId: Number(session.user.id),
-      projectId: Number(body.projectId),
+    const result = await db.insert(downloads).values({
+      userId,
+      projectId,
     });
 
-    return NextResponse.json({ success: true, download: newDownload }, { status: 201 });
+    return NextResponse.json({ message: "Download logged", result }, { status: 201 });
   } catch (error) {
-    console.error("Error creating download:", error);
-    return NextResponse.json({ error: "Failed to create download" }, { status: 500 });
+    console.error("[DOWNLOAD_POST_ERROR]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
+// GET /api/downloads?userId=123
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("userId");
+
+    if (!userId) {
+      return NextResponse.json({ error: "Missing userId in query" }, { status: 400 });
+    }
+
+    const results = await db
+      .select()
+      .from(downloads)
+      .where(eq(downloads.userId, Number(userId)))
+      .orderBy(desc(downloads.createdAt));
+
+    return NextResponse.json(results, { status: 200 });
+  } catch (error) {
+    console.error("[DOWNLOAD_GET_ERROR]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
