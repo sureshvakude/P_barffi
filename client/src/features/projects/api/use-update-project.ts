@@ -4,8 +4,7 @@ export type UpdateProjectRequest = {
   name?: string;
   width?: number;
   height?: number;
-  thumbnail?: string;
-  json?: any;
+  json?: string;
   isPro?: boolean;
   prize?: number;
   isTemplate?: boolean;
@@ -16,8 +15,7 @@ export type ProjectResponse = {
   name: string;
   width: number;
   height: number;
-  thumbnail?: string;
-  json: any;
+  json: string;
   isPro: boolean;
   prize: number;
   isTemplate: boolean;

@@ -14,17 +14,14 @@ export async function POST(req: NextRequest) {
     const name = body?.name?.trim() || "Untitled project";
     const width = typeof body?.width === "number" ? body.width : 900;
     const height = typeof body?.height === "number" ? body.height : 1200;
-    const thumbnail = body?.thumbnail ?? null;
-    const isPro = Boolean(body?.isPro);
-    const prize = body?.prize !== undefined ? Number(body.prize) : null;
-    const isTemplate = Boolean(body?.isTemplate);
-    const userType = session?.user?.userType ?? "guest";
+    const userType = session?.user?.userType ?? "user";
 
     // Validate JSON field
     let json;
     try {
       json = JSON.stringify(body?.json ?? "");
     } catch (error) {
+      console.error("Invalid JSON format:", error);
       return NextResponse.json({ message: "Invalid JSON format" }, { status: 400 });
     }
 
@@ -41,20 +38,16 @@ export async function POST(req: NextRequest) {
         name,
         height,
         width,
-        thumbnail,
         json,
         userType,
-        isPro,
-        prize,
-        isTemplate,
       })
       .$returningId();
 
     return NextResponse.json(
-      { message: "Project created successfully", projectId:newProjectId[0].id },
+      { message: "Project created successfully", projectId: newProjectId[0].id },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating project:", error);
     return NextResponse.json(
       { message: "Internal server error", error: error.message },

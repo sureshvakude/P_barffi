@@ -5,6 +5,19 @@ import { Loader, TriangleAlert } from "lucide-react";
 import { TemplateCard } from "./template-card";
 import { useAdminProjects } from "@/features/projects/hooks/useGetAdminProjects";
 
+type project = {
+    id: string;
+    name?: string;
+    json?: string;
+    width?: number;
+    height?: number;
+    isPro?: boolean;
+    prize?: number | null;
+    isTemplate?: boolean;
+    updatedAt?: string;
+    createdAt?: string;
+  };
+
 export const TemplatesSection = () => {
     const router = useRouter();
     const { data: projects, isLoading, isError } = useAdminProjects();
@@ -34,7 +47,7 @@ export const TemplatesSection = () => {
 
     return (
         <div>
-            <h3 className="font-semibold text-lg">Start from a pre-defined Templates</h3>
+            <h3 className="font-semibold text-lg md:text-xl">Starter Designs</h3>
 
             {projects && projects.length === 0 ? (
                 <div className="flex flex-col gap-y-4 items-center justify-center h-32">
@@ -43,7 +56,7 @@ export const TemplatesSection = () => {
                 </div>
             ) : (
                 <div className="flex flex-wrap items-center jusitfy-center gap-4 mt-4">
-                    {projects?.map((template: any) => (
+                    {projects?.map((template: project) => (
                         <TemplateCard
                             key={template?.id}
                             title={template?.name}

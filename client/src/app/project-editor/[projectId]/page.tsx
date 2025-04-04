@@ -8,9 +8,22 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
+type project = {
+    id: string;
+    name?: string;
+    json?: string;
+    width?: number;
+    height?: number;
+    isPro?: boolean;
+    prize?: number | null;
+    isTemplate?: boolean;
+    updatedAt?: string;
+    createdAt?: string;
+  };
+
 const EditorProjectIdPage = ({ params }: { params: Promise<{ projectId: string }> }) => {
     const [projectId, setProjectId] = useState<string | null>(null);
-    const [localProject, setLocalProject] = useState<any>(null);
+    const [localProject, setLocalProject] = useState<project>(null);
     const { data: session } = useSession();
 
     useEffect(() => {

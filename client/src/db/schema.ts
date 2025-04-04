@@ -18,7 +18,7 @@ export const projects = mysqlTable("projects", {
   json: json("json").notNull(),
   userType: varchar("userType", { length: 100 }).notNull(),
   isPro: boolean("isPro").default(false),
-  prize: int("prize"),
+  prize: int("prize").default(0),
   isTemplate: boolean("isTemplate").default(false),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),

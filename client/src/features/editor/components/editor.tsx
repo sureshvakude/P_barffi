@@ -27,8 +27,21 @@ import { TemplateSidebar } from "@/features/editor/components/template-sidebar";
 import { RemoveBgSidebar } from "@/features/editor/components/remove-bg-sidebar";
 import { SettingsSidebar } from "@/features/editor/components/settings-sidebar";
 
+type project = {
+    id: string;
+    name?: string;
+    json?: string;
+    width?: number;
+    height?: number;
+    isPro?: boolean;
+    prize?: number | null;
+    isTemplate?: boolean;
+    updatedAt?: string;
+    createdAt?: string;
+  };
+
 interface EditorProps {
-    initialData: any;
+    initialData: project;
 };
 
 export const Editor = ({ initialData }: EditorProps) => {

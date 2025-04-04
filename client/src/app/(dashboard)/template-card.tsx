@@ -32,7 +32,7 @@ export const TemplateCard = ({ canvasJson, title, onClick, disabled, height, wid
     fabricCanvasRef.current = canvas;
 
     const loadCanvas = async () => {
-      if (!canvasJson) return;
+      if (!canvasJson || !canvasRef || !fabricCanvasRef) return;
 
       try {
         await new Promise<void>((resolve) => {
@@ -68,7 +68,7 @@ export const TemplateCard = ({ canvasJson, title, onClick, disabled, height, wid
     loadCanvas();
 
     return () => {
-      if (fabricCanvasRef.current) {
+      if (fabricCanvasRef.current && canvasRef.current) {
         fabricCanvasRef.current.dispose();
         fabricCanvasRef.current = null;
       }

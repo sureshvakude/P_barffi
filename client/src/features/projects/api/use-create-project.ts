@@ -2,10 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 
 export type CreateProjectRequest = {
   name?: string;
-  json?: any;
+  json?: string;
   width?: number;
   height?: number;
-  thumbnail?: string | null;
   isPro?: boolean;
   prize?: number | null;
   isTemplate?: boolean;
@@ -29,11 +28,6 @@ const createProject = async (initialData: CreateProjectRequest): Promise<CreateP
         json: initialData?.json ?? "",
         width: initialData?.width ?? 900,
         height: initialData?.height ?? 1200,
-        thumbnail: initialData?.thumbnail ?? null,
-        isPro: false,
-        prize: 0,
-        // isTemplate: initialData?.isTemplate ?? false,
-        isTemplate: false,
       }),
     });
 
@@ -42,7 +36,7 @@ const createProject = async (initialData: CreateProjectRequest): Promise<CreateP
       throw new Error(`Failed to create project: ${errorText}`);
     }
     return response.json();
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating project:", error);
     throw new Error(error.message || "An error occurred while creating the project. Please try again.");
   }

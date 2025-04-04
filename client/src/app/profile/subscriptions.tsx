@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Subscription Component
 export const Subscription = () => {
-    const [subscription, setSubscription] = useState({
-        plan: "Pro",
-        price: "$29.99/month",
-        status: "Active",
-        renewalDate: "2024-06-01"
-    });
+    // const [subscription, setSubscription] = useState({
+    //     plan: "Pro",
+    //     price: "$29.99/month",
+    //     status: "Active",
+    //     renewalDate: "2024-06-01"
+    // });
 
     return (
         <Card>

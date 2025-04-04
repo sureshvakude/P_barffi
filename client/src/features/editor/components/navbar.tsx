@@ -27,6 +27,13 @@ interface NavbarProps {
   onChangeActiveTool: (tool: ActiveTool) => void;
 };
 
+type formdata = {
+  name?: string;
+  isPro?: boolean;
+  price?: string;
+  isTemplate?: boolean;
+};
+
 export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarProps) => {
   const data = useMutationState({
     filters: { mutationKey: ["project", { id }], exact: true, },
@@ -34,12 +41,11 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
   });
   const { data: session } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<formdata>({
     name: "",
     isPro: false,
     price: "", // Corrected here
     isTemplate: false,
-    thumbnail: "",
   });
 
   const updateProject = useUpdateProject(id);
@@ -50,7 +56,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
 
   const { openFilePicker } = useFilePicker({
     accept: ".json",
-    onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+    onFilesSuccessfullySelected: ({ plainFiles }) => {
       if (plainFiles && plainFiles.length > 0) {
         const file = plainFiles[0];
         const reader = new FileReader();
@@ -64,7 +70,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev: any) => ({
+    setFormData((prev: formdata) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : type === "number" ? Number(value) || "" : value,
     }));
@@ -74,9 +80,8 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
     updateProject.mutate({
       name: formData.name,
       isPro: formData.isPro,
-      prize: formData.prize ? parseInt(formData.prize) : undefined,
+      prize: formData.price ? parseInt(formData.price) : undefined,
       isTemplate: formData.isTemplate,
-      thumbnail: formData.thumbnail,
     });
     setIsModalOpen(false);
   };
@@ -246,7 +251,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
           <div className="flex flex-col gap-4">
             <Input name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
             <div className="flex items-center gap-2">
-              <Checkbox name="isPro" checked={formData.isPro} onCheckedChange={(checked) => setFormData({ ...formData, isPro: checked })} />
+              <Checkbox name="isPro" checked={formData.isPro} onCheckedChange={(checked) => setFormData({ ...formData, isPro: Boolean(checked) })} />
               <label>Is Pro</label>
             </div>
             <Input
@@ -257,7 +262,7 @@ export const Navbar = ({ id, editor, activeTool, onChangeActiveTool, }: NavbarPr
               onChange={handleChange}
             />
             <div className="flex items-center gap-2">
-              <Checkbox name="isTemplate" checked={formData.isTemplate} onCheckedChange={(checked) => setFormData({ ...formData, isTemplate: checked })} />
+              <Checkbox name="isTemplate" checked={formData.isTemplate} onCheckedChange={(checked) => setFormData({ ...formData, isTemplate: Boolean(checked) })} />
               <label>Is Template</label>
             </div>
             <Button onClick={handleSave}>Save</Button>

@@ -4,7 +4,7 @@ import { db, schema } from "@/db/db";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password, userType } = await req.json();
+    const { name, email, password } = await req.json();
 
     // Validation for required fields
     if (!name || !email || !password) {

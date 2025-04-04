@@ -46,7 +46,7 @@ const SignUpPage = () => {
       } else {
         throw new Error(result.message);
       }
-    } catch (error: any) {
+    } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -81,7 +81,7 @@ const SignUpPage = () => {
       }
 
       window.location.href = "/signin";
-    } catch (error: any) {
+    } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);

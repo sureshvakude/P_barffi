@@ -2,14 +2,16 @@ import { uuid } from "uuidv4";
 import { fabric } from "fabric";
 import type { RGBColor } from "react-color";
 
-export function transformText(objects: any) {
+export function transformText(objects) {
   if (!objects) return;
 
-  objects.forEach((item: any) => {
+  objects.forEach((item) => {
     if (item.objects) {
       transformText(item.objects);
     } else {
-      item.type === "text" && (item.type === "textbox");
+      if (item.type === "text" && (item.type === "textbox")) {
+        return;
+      }
     }
   });
 };
@@ -46,14 +48,14 @@ export const createFilter = (value: string) => {
       effect = new fabric.Image.filters.Grayscale();
       break;
     case "polaroid":
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       effect = new fabric.Image.filters.Polaroid();
       break;
     case "sepia":
       effect = new fabric.Image.filters.Sepia();
       break;
     case "kodachrome":
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       effect = new fabric.Image.filters.Kodachrome();
       break;
     case "contrast":
@@ -63,15 +65,15 @@ export const createFilter = (value: string) => {
       effect = new fabric.Image.filters.Brightness({ brightness: 0.8 });
       break;
     case "brownie":
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       effect = new fabric.Image.filters.Brownie();
       break;
     case "vintage":
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       effect = new fabric.Image.filters.Vintage();
       break;
     case "technicolor":
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       effect = new fabric.Image.filters.Technicolor();
       break;
     case "pixelate":
@@ -94,30 +96,29 @@ export const createFilter = (value: string) => {
       });
       break;
     case "removecolor":
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       effect = new fabric.Image.filters.RemoveColor({
         threshold: 0.2,
         distance: 0.5
       });
       break;
     case "blacknwhite":
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       effect = new fabric.Image.filters.BlackWhite();
       break;
     case "vibrance":
-      // @ts-ignore
-      effect = new fabric.Image.filters.Vibrance({ 
+      effect = new fabric.Image.filters.Vibrance({
         vibrance: 1,
       });
       break;
     case "blendcolor":
-      effect = new fabric.Image.filters.BlendColor({ 
+      effect = new fabric.Image.filters.BlendColor({
         color: "#00ff00",
         mode: "multiply",
       });
       break;
     case "huerotate":
-      effect = new fabric.Image.filters.HueRotation({ 
+      effect = new fabric.Image.filters.HueRotation({
         rotation: 0.5,
       });
       break;
@@ -125,10 +126,10 @@ export const createFilter = (value: string) => {
       effect = new fabric.Image.filters.Resize();
       break;
     case "gamma":
-      // @ts-ignore
       effect = new fabric.Image.filters.Gamma({
         gamma: [1, 0.5, 2.1]
       });
+      break;
     case "saturation":
       effect = new fabric.Image.filters.Saturation({
         saturation: 0.7,

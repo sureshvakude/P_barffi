@@ -6,7 +6,7 @@ export type ResponseType = {
   width: number;
   height: number;
   thumbnail?: string;
-  json: any; // Adjust based on your actual data structure
+  json: string; // Adjust based on your actual data structure
   isPro: boolean;
   prize: number;
   isTemplate: boolean;

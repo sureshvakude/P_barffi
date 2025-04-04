@@ -23,7 +23,7 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeProps) => {
       .getObjects()
       .find((object) => object.name === "clip");
 
-    // @ts-ignore
+    // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
     const scale = fabric.util.findScaleToFit(localWorkspace, {
       width: width,
       height: height,

@@ -9,6 +9,7 @@ export async function GET() {
 
     return NextResponse.json(adminTemplates, { status: 200 });
   } catch (error) {
+    console.error("Error fetching admin templates:", error);
     return NextResponse.json({ error: "Failed to fetch admin templates" }, { status: 500 });
   }
 }

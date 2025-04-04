@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db, schema } from "@/db/db";
+import { db } from "@/db/db";
 
 export async function GET() {
   try {
@@ -7,6 +7,7 @@ export async function GET() {
 
     return NextResponse.json(templates, { status: 200 });
   } catch (error) {
+    console.error("Error fetching templates:", error);
     return NextResponse.json({ error: "Failed to fetch templates" }, { status: 500 });
   }
 }

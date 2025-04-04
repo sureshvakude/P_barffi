@@ -137,7 +137,7 @@ const buildEditor = ({
 
     if (!center) return;
 
-    // @ts-ignore
+    // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
     canvas._centerObject(object, center);
   };
 
@@ -264,7 +264,7 @@ const buildEditor = ({
     changeFontSize: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
-          // @ts-ignore
+          // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
           // Faulty TS library, fontSize exists.
           object.set({ fontSize: value });
         }
@@ -278,7 +278,7 @@ const buildEditor = ({
         return FONT_SIZE;
       }
 
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       // Faulty TS library, fontSize exists.
       const value = selectedObject.get("fontSize") || FONT_SIZE;
 
@@ -287,7 +287,7 @@ const buildEditor = ({
     changeTextAlign: (value: string) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
-          // @ts-ignore
+          // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
           // Faulty TS library, textAlign exists.
           object.set({ textAlign: value });
         }
@@ -301,7 +301,7 @@ const buildEditor = ({
         return "left";
       }
 
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       // Faulty TS library, textAlign exists.
       const value = selectedObject.get("textAlign") || "left";
 
@@ -310,7 +310,7 @@ const buildEditor = ({
     changeFontUnderline: (value: boolean) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
-          // @ts-ignore
+          // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
           // Faulty TS library, underline exists.
           object.set({ underline: value });
         }
@@ -324,7 +324,7 @@ const buildEditor = ({
         return false;
       }
 
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       // Faulty TS library, underline exists.
       const value = selectedObject.get("underline") || false;
 
@@ -333,7 +333,7 @@ const buildEditor = ({
     changeFontLinethrough: (value: boolean) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
-          // @ts-ignore
+          // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
           // Faulty TS library, linethrough exists.
           object.set({ linethrough: value });
         }
@@ -347,7 +347,7 @@ const buildEditor = ({
         return false;
       }
 
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       // Faulty TS library, linethrough exists.
       const value = selectedObject.get("linethrough") || false;
 
@@ -356,7 +356,7 @@ const buildEditor = ({
     changeFontStyle: (value: string) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
-          // @ts-ignore
+          // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
           // Faulty TS library, fontStyle exists.
           object.set({ fontStyle: value });
         }
@@ -370,7 +370,7 @@ const buildEditor = ({
         return "normal";
       }
 
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       // Faulty TS library, fontStyle exists.
       const value = selectedObject.get("fontStyle") || "normal";
 
@@ -379,7 +379,7 @@ const buildEditor = ({
     changeFontWeight: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
-          // @ts-ignore
+          // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
           // Faulty TS library, fontWeight exists.
           object.set({ fontWeight: value });
         }
@@ -423,7 +423,7 @@ const buildEditor = ({
       setFontFamily(value);
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
-          // @ts-ignore
+          // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
           // Faulty TS library, fontFamily exists.
           object.set({ fontFamily: value });
         }
@@ -573,7 +573,7 @@ const buildEditor = ({
         return FONT_WEIGHT;
       }
 
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       // Faulty TS library, fontWeight exists.
       const value = selectedObject.get("fontWeight") || FONT_WEIGHT;
 
@@ -586,7 +586,7 @@ const buildEditor = ({
         return fontFamily;
       }
 
-      // @ts-ignore
+      // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
       // Faulty TS library, fontFamily exists.
       const value = selectedObject.get("fontFamily") || fontFamily;
 
@@ -812,13 +812,12 @@ export const useEditor = ({
   return { init, editor };
 };
 
-const checkAndApplyClipping = (img: any, canvas: any) => {
+const checkAndApplyClipping = (img, canvas) => {
   const objects = canvas.getObjects();
   const shape = objects.find((obj: { name: string; }) => obj.name === "clipShape");
 
   if (shape) {
     if (img.intersectsWithObject(shape)) {
-      console.log(img);
       img.clipPath = shape;
     } else {
       img.clipPath = null;

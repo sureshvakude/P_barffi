@@ -1,6 +1,7 @@
-import { IoTriangle } from "react-icons/io5";
-import { FaDiamond } from "react-icons/fa6";
-import { FaCircle, FaSquare, FaSquareFull } from "react-icons/fa";
+// import { IoTriangle } from "react-icons/io5";
+// import { FaDiamond } from "react-icons/fa6";
+import { FaCircle } from "react-icons/fa";
+// import {FaSquare, FaSquareFull } from "react-icons/fa";
 
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { ShapeTool } from "@/features/editor/components/shape-tool";

@@ -1,5 +1,6 @@
 import { fabric } from "fabric";
 import { useCallback, useRef } from "react";
+// import { RefObject } from "react";
 
 interface UseClipboardProps {
   canvas: fabric.Canvas | null;
@@ -8,18 +9,18 @@ interface UseClipboardProps {
 export const useClipboard = ({
   canvas
 }: UseClipboardProps) => {
-  const clipboard = useRef<any>(null);
+  const clipboard = useRef(null);
 
   const copy = useCallback(() => {
-    canvas?.getActiveObject()?.clone((cloned: any) => {
+    canvas?.getActiveObject()?.clone((cloned) => {
       clipboard.current = cloned;
     });
   }, [canvas]);
-  
+
   const paste = useCallback(() => {
     if (!clipboard.current) return;
 
-    clipboard.current.clone((clonedObj: any) => {
+    clipboard.current.clone((clonedObj) => {
       canvas?.discardActiveObject();
       clonedObj.set({
         left: clonedObj.left + 10,
@@ -29,7 +30,7 @@ export const useClipboard = ({
 
       if (clonedObj.type === "activeSelection") {
         clonedObj.canvas = canvas;
-        clonedObj.forEachObject((obj: any) => {
+        clonedObj.forEachObject((obj) => {
           canvas?.add(obj);
         });
         clonedObj.setCoords();

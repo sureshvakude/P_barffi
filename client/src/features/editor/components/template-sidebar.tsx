@@ -1,8 +1,7 @@
-import Image from "next/image";
 import { AlertTriangle, Loader, Crown } from "lucide-react";
 
-import { 
-  ActiveTool, 
+import {
+  ActiveTool,
   Editor,
 } from "@/features/editor/types";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
@@ -17,6 +16,19 @@ interface TemplateSidebarProps {
   editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
+};
+
+type project = {
+  id: string;
+  name?: string;
+  json?: string;
+  width?: number;
+  height?: number;
+  isPro?: boolean;
+  prize?: number | null;
+  isTemplate?: boolean;
+  updatedAt?: string;
+  createdAt?: string;
 };
 
 export const TemplateSidebar = ({
@@ -36,7 +48,7 @@ export const TemplateSidebar = ({
     onChangeActiveTool("select");
   };
 
-  const onClick = async (project: any) => {
+  const onClick = async (project: project) => {
     const ok = await confirm();
 
     if (ok) {
@@ -72,19 +84,13 @@ export const TemplateSidebar = ({
       <ScrollArea className="flex-1 overflow-auto">
         <div className="p-4">
           <div className="grid grid-cols-2 gap-4">
-            {projects && projects.map((project:any) => (
+            {projects && projects.map((project: project) => (
               <button
                 key={project?.id}
                 style={{ aspectRatio: `${project?.width}/${project?.height}` }}
                 onClick={() => onClick(project)}
                 className="relative w-full group hover:opacity-75 transition bg-muted rounded-sm overflow-hidden border"
               >
-                <Image
-                  fill
-                  src={project?.thumbnail || "/uploads/placeholder.jpg"}
-                  alt={project?.name || "Project"}
-                  className="object-cover"
-                />
                 {project?.isPro && (
                   <div className="absolute top-2 right-2 size-8 items-center flex justify-center bg-black/50 rounded-full">
                     <Crown className="size-4 fill-yellow-500 text-yellow-500" />

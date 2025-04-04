@@ -1,6 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
-import { AlertTriangle, Loader, Upload, Trash2 } from "lucide-react";
+// import Image from "next/image";
+// import Link from "next/link";
+// import { AlertTriangle, Loader, Upload, Trash2 } from "lucide-react";
+import { Upload, Trash2 } from "lucide-react";
 
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
@@ -8,6 +9,7 @@ import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-hea
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface ImageSidebarProps {
   editor: Editor | undefined;
@@ -75,7 +77,7 @@ export const ImageSidebar = ({ editor, activeTool, onChangeActiveTool }: ImageSi
                   onClick={() => editor?.addImage(image)}
                   className="relative w-full h-[100px] group hover:opacity-75 transition bg-muted rounded-sm overflow-hidden border"
                 >
-                  <img src={image} alt="Uploaded" className="object-cover w-full h-full" />
+                  <Image src={image} alt="Uploaded" className="object-cover w-full h-full" width={100} height={100} />
                 </button>
                 <button
                   onClick={() => handleDelete(index)}

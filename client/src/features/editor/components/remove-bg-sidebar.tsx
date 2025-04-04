@@ -1,14 +1,10 @@
 import Image from "next/image";
 import { AlertTriangle } from "lucide-react";
-
 // import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
-
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
-
 // import { useRemoveBg } from "@/features/ai/api/use-remove-bg";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -24,32 +20,32 @@ export const RemoveBgSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: RemoveBgSidebarProps) => {
-//   const { shouldBlock, triggerPaywall } = usePaywall();
-//   const mutation = useRemoveBg();
+  //   const { shouldBlock, triggerPaywall } = usePaywall();
+  //   const mutation = useRemoveBg();
 
   const selectedObject = editor?.selectedObjects[0];
 
-  // @ts-ignore
+  // @ts-expect-error: Suppressing type error for accessing currentSrc on _originalElement
   const imageSrc = selectedObject?._originalElement?.currentSrc;
 
   const onClose = () => {
     onChangeActiveTool("select");
   };
 
-//   const onClick = () => {
-//     if (shouldBlock) {
-//       triggerPaywall();
-//       return;
-//     }
+  //   const onClick = () => {
+  //     if (shouldBlock) {
+  //       triggerPaywall();
+  //       return;
+  //     }
 
-//     mutation.mutate({
-//       image: imageSrc,
-//     }, {
-//       onSuccess: ({ data }) => {
-//         editor?.addImage(data);
-//       },
-//     });
-//   };
+  //     mutation.mutate({
+  //       image: imageSrc,
+  //     }, {
+  //       onSuccess: ({ data }) => {
+  //         editor?.addImage(data);
+  //       },
+  //     });
+  //   };
 
   return (
     <aside
@@ -75,7 +71,7 @@ export const RemoveBgSidebar = ({
           <div className="p-4 space-y-4">
             <div className={cn(
               "relative aspect-square rounded-md overflow-hidden transition bg-muted",
-            //   mutation.isPending && "opacity-50",
+              //   mutation.isPending && "opacity-50",
             )}>
               <Image
                 src={imageSrc}
@@ -85,8 +81,8 @@ export const RemoveBgSidebar = ({
               />
             </div>
             <Button
-            //   disabled={mutation.isPending}
-            //   onClick={onClick}
+              //   disabled={mutation.isPending}
+              //   onClick={onClick}
               className="w-full"
             >
               Remove background

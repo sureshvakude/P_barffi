@@ -12,10 +12,23 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useDeleteProject } from "@/features/projects/api/use-delete-project";
 
+type project = {
+  id: string;
+  name?: string;
+  json?: string;
+  width?: number;
+  height?: number;
+  isPro?: boolean;
+  prize?: number | null;
+  isTemplate?: boolean;
+  updatedAt?: string;
+  createdAt?: string;
+};
+
 export const ProjectsSection = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const [localProjects, setLocalProjects] = useState<any[]>([]);
+  const [localProjects, setLocalProjects] = useState<project[]>([]);
   const { deleteProject } = useDeleteProject();
 
   // Fetch projects from database if logged in
@@ -80,19 +93,12 @@ export const ProjectsSection = () => {
       <h3 className="font-semibold text-lg">Recent projects</h3>
       <Table>
         <TableBody>
-          {finalProjects.map((project: any, index: any) => (
+          {finalProjects.map((project: project, index: number) => (
             <TableRow key={project.id || index}>
               <TableCell
                 onClick={() => router.push(`/project-editor/${project.id}`)}
                 className="font-medium flex items-center gap-x-2 cursor-pointer"
               >
-                {/* <Image
-                  src={project.thumbnail || "/uploads/placeholder.jpg"}
-                  alt="Project thumbnail"
-                  width={40}
-                  height={40}
-                  className="rounded-md"
-                /> */}
                 {project.name}
               </TableCell>
               <TableCell
@@ -140,7 +146,7 @@ function getTimeAgo(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  
+
   if (diffInSeconds < 60) return "just now";
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;

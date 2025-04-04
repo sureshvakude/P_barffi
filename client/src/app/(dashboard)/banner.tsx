@@ -5,31 +5,41 @@ import { ArrowRight, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCreateProject } from "@/features/projects/api/use-create-project";
 import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 
 export const Banner = () => {
   const router = useRouter();
-  const { mutate, isPending } = useCreateProject();
+  const { mutateAsync: createProject, isPending } = useCreateProject();
   const { data: session } = useSession();
+  const [isCreating, setIsCreating] = useState(false);
 
-  const onClick = () => {
-    if (isPending) return;
+  const onClick = async () => {
+    if (isPending || isCreating) {
+      return;
+    }
 
-    mutate(
-      { name: "Untitled Project", json: "" },
-      {
-        onSuccess: (data) => {
-          if (data) {
-            router.push(`/editor/${data?.projectId}`);
-          } else {
-            console.error("Project ID missing:", data);
-          }
-        },
-        onError: (error) => {
-          console.error("Failed to create project:", error);
-        },
+    setIsCreating(true);
+    try {
+      const data = await createProject({ name: "Untitled Project", json: "" });
+      if (data?.projectId) {
+        router.push(`/editor/${data.projectId}`);
+      } else {
+        console.error("Project ID missing:", data);
       }
-    );
+    } catch (error) {
+      console.error("Failed to create project:", error);
+    } finally {
+      setIsCreating(false);
+      console.log('Creation process completed');
+    }
   };
+
+  // Cleanup on component unmount
+  useEffect(() => {
+    return () => {
+      setIsCreating(false);
+    };
+  }, []);
 
   return (
     <div className="text-white aspect-[5/1] min-h-[248px] flex gap-x-6 p-6 items-center rounded-xl bg-gradient-to-r from-[#2e62cb] via-[#0073ff] to-[#3faff5]">
@@ -47,9 +57,14 @@ export const Banner = () => {
         </p>
 
         {session?.user?.userType === "admin" ? (
-          <Button disabled={isPending} onClick={onClick} variant="secondary" className="w-[160px] cursor-pointer">
+          <Button
+            disabled={isPending || isCreating}
+            onClick={onClick}
+            variant="secondary"
+            className="w-[160px] cursor-pointer"
+          >
             Start creating
-            {isPending ? <Loader2 className="size-4 ml-2 animate-spin" /> : <ArrowRight className="size-4 ml-2" />}
+            {(isPending || isCreating) ? <Loader2 className="size-4 ml-2 animate-spin" /> : <ArrowRight className="size-4 ml-2" />}
           </Button>
         ) : (
           <Button variant="secondary" className="w-[160px] cursor-pointer">

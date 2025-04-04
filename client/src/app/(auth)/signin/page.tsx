@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { Loader2, TriangleAlert } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
 
-const Page = () => {
+// Create a wrapper component that uses useSearchParams
+const SignInForm = () => {
   const [loading, setLoading] = useState(false);
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingGithub, setLoadingGithub] = useState(false);
@@ -135,6 +136,15 @@ const Page = () => {
         </CardContent>
       </Card>
     </div>
+  );
+};
+
+// Main page component that wraps the form in Suspense
+const Page = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInForm />
+    </Suspense>
   );
 };
 

@@ -20,7 +20,7 @@ interface AiSidebarProps {
 };
 
 export const AiSidebar = ({
-  editor,
+  // editor,
   activeTool,
   onChangeActiveTool,
 }: AiSidebarProps) => {

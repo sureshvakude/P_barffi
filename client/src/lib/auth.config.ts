@@ -65,12 +65,10 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!dbUser && account) {
-          // Insert user into DB if it doesn't exist (OAuth case)
           await db.insert(schema.users).values({
             name: user.name || "Anonymous",
             email: user.email,
-            password: "", // No password for OAuth users
-            userType: "user", // Default user type
+            password: "",
           });
 
           // Fetch the newly inserted user

@@ -36,7 +36,7 @@ Happy exploring! 🚀
         }
 
         return { success: true, message: 'OTP email sent successfully' };
-    } catch (error: any) {
+    } catch (error) {
         return { success: false, message: error.message };
     }
 }
